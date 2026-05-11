@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -25,6 +26,7 @@ public class UserRepository {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public void addUser(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         u.setReg_date(new Date());
