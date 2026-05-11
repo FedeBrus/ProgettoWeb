@@ -1,5 +1,6 @@
 package com.palestra.palestra.pojo;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class User {
@@ -9,14 +10,14 @@ public class User {
     private String email;
     private String username;
     private String password;
-    private Date date_of_birth;
-    private Date reg_date;
+    private LocalDate date_of_birth;
+    private LocalDate reg_date;
     private String role;
 
     public User() {
     }
 
-    public User(String name, String surname, String email, String username, String password, Date date_of_birth, String role) {
+    public User(String name, String surname, String email, String username, String password, LocalDate date_of_birth, String role) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -74,19 +75,19 @@ public class User {
         this.password = password;
     }
 
-    public Date getDate_of_birth() {
+    public LocalDate getDate_of_birth() {
         return date_of_birth;
     }
 
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth(LocalDate date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 
-    public Date getReg_date() {
+    public LocalDate getReg_date() {
         return reg_date;
     }
 
-    public void setReg_date(Date reg_date) {
+    public void setReg_date(LocalDate reg_date) {
         this.reg_date = reg_date;
     }
 

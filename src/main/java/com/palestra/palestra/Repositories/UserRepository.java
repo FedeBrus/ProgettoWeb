@@ -9,6 +9,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Repository
@@ -29,7 +30,7 @@ public class UserRepository {
     @Transactional
     public void addUser(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
-        u.setReg_date(new Date());
+        u.setReg_date(LocalDate.now());
         userDetailsManager.createUser(new SecurityUser(u));
 
         String sql = "INSERT INTO UserData VALUES (?, ?, ?, ?, ?, ?)";
@@ -39,7 +40,7 @@ public class UserRepository {
                 u.getSurname(),
                 u.getDate_of_birth(),
                 u.getEmail(),
-                new java.sql.Date(u.getReg_date().getTime())
+                java.sql.Date.valueOf(u.getReg_date())
         );
     }
 

@@ -1,6 +1,7 @@
 package com.palestra.palestra.Controller;
 
 import com.palestra.palestra.Repositories.UserRepository;
+import com.palestra.palestra.Services.Auth.CheckSignUpInfo;
 import com.palestra.palestra.Services.Auth.CheckUser;
 import com.palestra.palestra.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,20 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 @Controller
 public class PublicController {
     private final UserRepository userRepository;
     private final CheckUser checkUserService;
+    private final CheckSignUpInfo checkSignUpInfoService;
 
     @Autowired
-    PublicController(UserRepository userRepository, CheckUser checkUserService) {
+    PublicController(UserRepository userRepository, CheckUser checkUserService, CheckSignUpInfo checkSignUpInfoService) {
         this.userRepository = userRepository;
         this.checkUserService = checkUserService;
+        this.checkSignUpInfoService = checkSignUpInfoService;
     }
 
     @GetMapping("/")
@@ -53,19 +57,19 @@ public class PublicController {
         @RequestParam String role,
         Model model
     ) {
-        String returnPage;
+        String returnPage = "public/auth/signup";
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = dateFormat.parse(dob);
+            LocalDate date = LocalDate.parse(dob);
             User newUser = new User(name, surname, email, username, password, date, role);
 
-            if (checkUserService.checkAndInsert(newUser)) {
-                returnPage = "public/auth/signup_success";
-            } else {
-                model.addAttribute("unsuccessful", true);
-                returnPage = "public/auth/signup";
+            if (checkSignUpInfoService.checkUserInfo(newUser)) {
+                if (checkUserService.checkAndInsert(newUser)) {
+                    returnPage = "public/auth/signup_success";
+                } else {
+                    model.addAttribute("unsuccessful", true);
+                }
             }
-        } catch (ParseException e) {
+        } catch (DateTimeParseException e) {
             // Come fallback in caso la data abbia un formato non valido
             returnPage = "public/auth/signup";
         }
