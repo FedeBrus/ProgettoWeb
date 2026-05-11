@@ -1,4 +1,4 @@
-package com.palestra.palestra;
+package com.palestra.palestra.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
