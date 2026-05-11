@@ -11,4 +11,7 @@ public class PublicController {
     public String homepage(Model page){
         return "public/index";
     }
+
+    @GetMapping("/signup")
+    public String signuppage(Model page) { return "public/auth/signup.html"; }
 }
