@@ -21,4 +21,9 @@ public class PublicController {
     public String login(Model page) {
         return "public/auth/login";
     }
+
+    @GetMapping("/signup")
+    public String signup(Model page) {
+        return "public/auth/signup";
+    }
 }
