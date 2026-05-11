@@ -1,31 +1,15 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <th:block th:include="snippets/head" />
 </head>
 
 <body class="bg-light">
+    <!-- Navbar -->
+    <th:block th:include="snippets/navbar" />
     <div class="container py-4">
 
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm px-4 py-3">
-            <a class="navbar-brand fw-bold" href="#">
-                <th:block th:include="SharedTitle" />
-            </a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Inizia allenamento</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Registrati</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">Contattaci</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
 
         <!-- Titolo e immagine -->
         <div class="text-center my-5">
