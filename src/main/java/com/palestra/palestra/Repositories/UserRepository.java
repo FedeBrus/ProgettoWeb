@@ -5,6 +5,11 @@ import com.palestra.palestra.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
@@ -12,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 @Repository
 public class UserRepository {
@@ -43,6 +49,26 @@ public class UserRepository {
                 u.getEmail(),
                 java.sql.Date.valueOf(u.getReg_date())
         );
+    }
+
+    @Transactional
+    public Authentication changeUserRole(String username, SimpleGrantedAuthority newRole, Authentication auth) {
+        UserDetails deets = userDetailsManager.loadUserByUsername(username);
+        SecurityUser s = new SecurityUser(new User(username, deets.getPassword(), newRole.getAuthority()));
+        userDetailsManager.updateUser(s);
+
+        UserDetails updated = userDetailsManager.loadUserByUsername(username);
+        Authentication refreshed = new UsernamePasswordAuthenticationToken(updated, auth.getCredentials(), updated.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(refreshed);
+        return refreshed;
+    }
+
+    @Transactional
+    public void changePassword(String username, String newPassword) {
+        String password = userDetailsManager.loadUserByUsername(username).getPassword();
+
+        userDetailsManager.changePassword(Objects.requireNonNull(password), Objects.requireNonNull(passwordEncoder.encode(newPassword)));
     }
 
     public boolean userExists(String username) {
