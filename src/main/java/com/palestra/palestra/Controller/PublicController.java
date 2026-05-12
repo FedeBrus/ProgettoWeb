@@ -90,4 +90,8 @@ public class PublicController {
         return "public/auth/login";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        return "public/logout";
+    }
 }

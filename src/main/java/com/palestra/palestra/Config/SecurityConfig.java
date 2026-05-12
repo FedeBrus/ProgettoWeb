@@ -48,6 +48,11 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
         );
 
+        http.logout(c ->
+                c.logoutUrl("/perform_logout")
+                .logoutSuccessUrl("/logout")
+        );
+
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
