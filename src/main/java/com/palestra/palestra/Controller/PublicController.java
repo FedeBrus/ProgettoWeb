@@ -62,7 +62,7 @@ public class PublicController {
                 if (checkUserService.checkAndInsert(newUser)) {
                     returnPage = "public/auth/signup_success";
                 } else {
-                    model.addAttribute("unsuccessful", true);
+                    model.addAttribute("failed", true);
                 }
             }
         } catch (DateTimeParseException e) {

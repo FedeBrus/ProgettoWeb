@@ -107,6 +107,10 @@
                 <button type="reset" class="btn btn-danger">Reset</button>
             </div>
         </form>
+
+        <div th:if="${failed}" class="alert alert-danger" role="alert">
+            Sign up fallito
+        </div>
     </div>
 </body>
 </html>
