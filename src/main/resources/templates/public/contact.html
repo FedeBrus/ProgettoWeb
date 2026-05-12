@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="snippets/head" />
+</head>
+<body>
+    <th:block th:include="snippets/navbar"/>
+    <div class="container py-5">
+
+        <!-- Titolo -->
+        <div class="text-center my-5">
+            <h1 class="display-4 fw-bold mb-4">
+                Contattaci
+            </h1>
+        </div>
+
+        <form action="/contact" method="POST">
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="inputName" name="name">
+            </div>
+
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input type="text" class="form-control" id="inputEmail" name="email">
+            </div>
+
+            <div class="mb-3">
+                <label for="textareaMessage" class="form-label">Messaggio</label>
+                <textarea class="form-control" id="textareaMessage" rows="3"></textarea>
+            </div>
+
+            <div class="container py-4">
+                <button type="submit" class="btn btn-primary">Invia</button>
+                <button type="reset" class="btn btn-danger">Reset</button>
+            </div>
+        </form>
+
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            Messaggio inviato con successo
+        </div>
+    </div>
+</body>
+</html>

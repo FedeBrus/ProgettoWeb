@@ -14,17 +14,17 @@
             </h1>
         </div>
 
-        <form>
+        <form id="signupForm" action="/signup" method="POST">
             <!-- Nome -->
             <div class="mb-3">
-                <label for="inputNome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="inputNome" name="name">
+                <label for="inputName" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="inputName" name="name">
             </div>
 
             <!-- Cognome -->
             <div class="mb-3">
-                <label for="inputCognome" class="form-label">Cognome</label>
-                <input type="text" class="form-control" id="inputCognome" name="surname">
+                <label for="inputSurname" class="form-label">Cognome</label>
+                <input type="text" class="form-control" id="inputSurname" name="surname">
             </div>
 
             <!-- Data di nascita -->
@@ -48,7 +48,8 @@
             <!-- Password -->
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword" name="password">
+                <input type="password" class="form-control" pattern="^(?=.*id_10).{8,}$" id="inputPassword" name="password">
+                <small id="passwordHelp" class="form-text text-muted">La password deve avere almeno 8 caratteri e contenere la stringa id_10</small>
             </div>
 
             <!-- Password Confirmation -->
@@ -68,7 +69,7 @@
                                 <p class="text-center fw-bold">
                                     Gratuito
                                 </p>
-                                <input type="radio" class="btn-check" id="radioPlanTrial" name="radioPlan">
+                                <input type="radio" class="btn-check" id="radioPlanTrial" name="role" value="ROLE_USER_PROVA">
                                 <label class="btn btn-outline-primary" for="radioPlanTrial">Seleziona</label>
                             </div>
                         </div>
@@ -81,7 +82,7 @@
                                 <p class="text-center fw-bold">
                                     70€ al mese / 700€ all'anno
                                 </p>
-                                <input type="radio" class="btn-check" id="radioPlanBasic" name="radioPlan">
+                                <input type="radio" class="btn-check" id="radioPlanBasic" name="role" value="ROLE_USER_BASIC">
                                 <label class="btn btn-outline-primary" for="radioPlanBasic">Seleziona</label>
                             </div>
                         </div>
@@ -94,7 +95,7 @@
                                 <p class="text-center fw-bold">
                                     120€ al mese / 1100€ all'anno
                                 </p>
-                                <input type="radio" class="btn-check" id="radioPlanPro" name="radioPlan">
+                                <input type="radio" class="btn-check" id="radioPlanPro" name="role" value="ROLE_USER_PRO">
                                 <label class="btn btn-outline-primary" for="radioPlanPro">Seleziona</label>
                             </div>
                         </div>
@@ -107,12 +108,16 @@
                 <button type="reset" class="btn btn-danger">Reset</button>
             </div>
         </form>
+
+        <div th:if="${failed}" class="alert alert-danger" role="alert">
+            Sign up fallito
+        </div>
     </div>
 </body>
 </html>
-
+<script src="/js/signup.js"></script>
 <script>
-    radioButtons = document.querySelectorAll('input[name="radioPlan"]');
+    radioButtons = document.querySelectorAll('input[name="role"]');
 
     radioButtons.forEach(rb => {
         rb.addEventListener("change", _ => {
