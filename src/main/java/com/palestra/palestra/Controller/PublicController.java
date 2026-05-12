@@ -81,4 +81,10 @@ public class PublicController {
         page.addAttribute("success", true);
         return "public/contact";
     }
+
+    @PostMapping("/loginFailure")
+    public String loginFailure(Model page) {
+        page.addAttribute("failed", true);
+        return "public/auth/login";
+    }
 }
