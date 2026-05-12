@@ -40,6 +40,7 @@ public class SecurityConfig {
                 auth.requestMatchers("/dashboard")
                         .hasAnyRole("USER_ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
                 .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
+                .requestMatchers("/dashboard/profile").hasAnyRole("USER_ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
                 .anyRequest().permitAll()
         );
 
