@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 @Repository
 public class UserRepository {
@@ -43,6 +44,16 @@ public class UserRepository {
                 u.getEmail(),
                 java.sql.Date.valueOf(u.getReg_date())
         );
+    }
+
+    @Transactional
+    public void changePassword(String username, String newPassword) {
+        final String sql = "SELECT password FROM Users WHERE username = ?";
+        RowMapper<String> rm = (r, i) -> r.getString(1);
+
+        String password = jdbc.query(sql, rm, username).getFirst();
+
+        userDetailsManager.changePassword(password, Objects.requireNonNull(passwordEncoder.encode(newPassword)));
     }
 
     public boolean userExists(String username) {

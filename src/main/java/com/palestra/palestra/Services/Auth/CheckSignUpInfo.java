@@ -1,12 +1,20 @@
 package com.palestra.palestra.Services.Auth;
 
 import com.palestra.palestra.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
 @Service
 public class CheckSignUpInfo {
+    final PasswordChecker pwChecker;
+
+    @Autowired
+    public CheckSignUpInfo(PasswordChecker pwChecker) {
+        this.pwChecker = pwChecker;
+    }
+
     public boolean checkUserInfo(User u) {
         if (
             u.getName().isEmpty() ||
@@ -23,7 +31,7 @@ public class CheckSignUpInfo {
             return false;
         }
 
-        if (u.getPassword().length() < 8 || !u.getPassword().contains("id_10")) {
+        if (!pwChecker.checkPassword(u.getPassword())) {
             return false;
         }
 
