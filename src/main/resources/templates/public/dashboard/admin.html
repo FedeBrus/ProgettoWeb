@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+<th:block th:insert="~{snippets/navbar}" />
+    <div class="container">
+        <h1 class="text-center text-primary">DASHBOARD ADMIN</h1>
+        <h3>Benvenuto <th:block th:text="${username}"/></h3>
+    </div>
+    <div class="container">
+        <div class="d-flex align-content-center justify-content-around">
+            <button class="btn btn-primary">Lista utenti</button>
+            <button class="btn btn-primary">Rimuovi utenti scaduti</button>
+            <button class="btn btn-primary">Statistiche</button>
+        </div>
+    </div>
+</body>
+</html>

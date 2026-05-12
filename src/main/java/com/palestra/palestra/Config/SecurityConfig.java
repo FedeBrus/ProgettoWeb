@@ -38,10 +38,12 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth ->
                 auth.requestMatchers("/dashboard")
-                        .hasAnyRole("USER_ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
-                .requestMatchers("/dashboard/profile").hasAnyRole("USER_ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
-                .anyRequest().permitAll()
+                    .hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
+                    .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
+                    .requestMatchers("/dashboard/admin").hasRole("ADMIN")
+                    .requestMatchers("/dashboard/user_list").hasRole("ADMIN")
+                    .requestMatchers("/dashboard/profile").hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
+                    .anyRequest().permitAll()
         );
 
         http.csrf(AbstractHttpConfigurer::disable);

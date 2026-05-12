@@ -32,11 +32,22 @@ public class DashboardController{
         return "public/dashboard/prova";
     }
 
+    @GetMapping("/dashboard/admin")
+    public String adminDashboard(Model page, Authentication auth) {
+        String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
+        page.addAttribute("username", username);
+
+        return "public/dashboard/admin";
+    }
+
     @GetMapping("/dashboard")
     public String dashboardHandler(Authentication auth) {
         String returnPage = "";
-        if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"))) {
+        System.out.println("Autorità dell'utente: " + auth.getAuthorities());
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"))) {
             returnPage = "forward:/dashboard/prova";
+        } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            returnPage = "forward:/dashboard/admin";
         }
 
         return returnPage;
