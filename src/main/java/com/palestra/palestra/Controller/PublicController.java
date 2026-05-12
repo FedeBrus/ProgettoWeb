@@ -32,18 +32,18 @@ public class PublicController {
         return "public/index";
     }
 
-    @GetMapping("/signup")
-    public String signuppage(Model page) {
-        return "public/auth/signup";
-    }
-
     @GetMapping("/login")
     public String login(Model page) {
         return "public/auth/login";
     }
 
+    @GetMapping("/signup")
+    public String signupGet(Model page) {
+        return "public/auth/signup";
+    }
+
     @PostMapping("/signup")
-    public String addUser(
+    public String signupPost(
         @RequestParam String name,
         @RequestParam String surname,
         @RequestParam String email,
