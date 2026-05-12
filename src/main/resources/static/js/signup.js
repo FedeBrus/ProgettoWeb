@@ -45,7 +45,7 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     const password = document.getElementById("inputPassword").value;
     const confirmation = document.getElementById("inputPasswordConfirmation").value;
 
-    if (password.length < 8 || !password.includes("team10")) {
+    if (password.length < 8 || !password.includes("id_10")) {
         alert("La password non rispetta i vincoli di sicurezza");
         return;
     }

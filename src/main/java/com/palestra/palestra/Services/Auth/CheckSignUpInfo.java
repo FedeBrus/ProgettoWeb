@@ -23,7 +23,7 @@ public class CheckSignUpInfo {
             return false;
         }
 
-        if (u.getPassword().length() < 8 || !u.getPassword().contains("team10")) {
+        if (u.getPassword().length() < 8 || !u.getPassword().contains("id_10")) {
             return false;
         }
 
