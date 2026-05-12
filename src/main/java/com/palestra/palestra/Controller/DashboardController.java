@@ -4,8 +4,10 @@ import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +60,35 @@ public class DashboardController{
         page.addAttribute("role", authUser.getAuthorities().iterator().next().toString());
 
         return "public/dashboard/view_profile";
+    }
+
+    @GetMapping("/dashboard/upgrade")
+    public String upgradeProfile(Model page, Authentication auth) {
+        page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
+        return "public/dashboard/upgrade";
+    }
+
+    public String updateProfile(Model page, Authentication auth, String newRole) {
+        User u = (User) Objects.requireNonNull(auth.getPrincipal());
+        try {
+            auth = utils.changeRole(u.getUsername(), new SimpleGrantedAuthority(newRole), auth);
+            page.addAttribute("success", true);
+        } catch (Exception e) {
+            page.addAttribute("success", false);
+        }
+
+        page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
+        return "public/dashboard/upgrade";
+    }
+
+    @PostMapping("/dashboard/upgrade/basic")
+    public String upgradeProfileBasic(Model page, Authentication auth) {
+        return updateProfile(page, auth, "ROLE_USER_BASIC");
+    }
+
+    @PostMapping("/dashboard/upgrade/pro")
+    public String upgradeProfilePro(Model page, Authentication auth) {
+        return updateProfile(page, auth, "ROLE_USER_PRO");
     }
 
     @GetMapping("/dashboard/change_password")
