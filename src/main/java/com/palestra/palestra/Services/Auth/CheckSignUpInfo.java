@@ -28,7 +28,7 @@ public class CheckSignUpInfo {
         }
 
         boolean validRole = switch (u.getRole()) {
-            case "ROLE_TRIAL", "ROLE_BASIC", "ROLE_PRO" -> true;
+            case "ROLE_USER_PROVA", "ROLE_USER_BASIC", "ROLE_USER_PRO" -> true;
             default -> false;
         };
 
