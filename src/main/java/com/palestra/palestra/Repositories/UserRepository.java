@@ -66,12 +66,9 @@ public class UserRepository {
 
     @Transactional
     public void changePassword(String username, String newPassword) {
-        final String sql = "SELECT password FROM Users WHERE username = ?";
-        RowMapper<String> rm = (r, i) -> r.getString(1);
+        String password = userDetailsManager.loadUserByUsername(username).getPassword();
 
-        String password = jdbc.query(sql, rm, username).getFirst();
-
-        userDetailsManager.changePassword(password, Objects.requireNonNull(passwordEncoder.encode(newPassword)));
+        userDetailsManager.changePassword(Objects.requireNonNull(password), Objects.requireNonNull(passwordEncoder.encode(newPassword)));
     }
 
     public boolean userExists(String username) {
