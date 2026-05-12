@@ -74,6 +74,7 @@ public class UserRepository {
         return jdbc.query(sql, rm, username).getFirst();
     }
 
+    @Transactional
     public List<User> getAllUserDetails() {
         final String sql = "SELECT ud.USERNAME, NAME, SURNAME, DATE_OF_BIRTH, EMAIL, REG_DATE, AUTHORITY, ENABLED FROM USERDATA AS ud JOIN AUTHORITIES AS auth ON auth.USERNAME = ud.USERNAME JOIN USERS AS u ON ud.USERNAME = u.USERNAME ORDER BY AUTHORITY, REG_DATE";
         RowMapper<User> rm = (r, i) -> {
@@ -91,5 +92,26 @@ public class UserRepository {
         };
 
         return jdbc.query(sql, rm);
+    }
+
+    @Transactional
+    public int removeExpiredUsers() {
+        String sql = "SELECT USERNAME FROM USERS WHERE ENABLED = FALSE";
+        RowMapper<String> rm = (r, i) -> {
+            return r.getString(1);
+        };
+
+        List<String> usersToBeDeleted = jdbc.query(sql, rm);
+
+        String sql_remove_from_users = "DELETE FROM USERS WHERE USERNAME = ?";
+        String sql_remove_from_userdata = "DELETE FROM USERDATA WHERE USERNAME = ?";
+        String sql_remove_from_authorities = "DELETE FROM AUTHORITIES WHERE USERNAME = ?";
+        for (String username : usersToBeDeleted) {
+            jdbc.update(sql_remove_from_users, username);
+            jdbc.update(sql_remove_from_userdata, username);
+            jdbc.update(sql_remove_from_authorities, username);
+        }
+
+        return usersToBeDeleted.size();
     }
 }

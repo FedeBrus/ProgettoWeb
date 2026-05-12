@@ -9,12 +9,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Objects;
 
 @Controller
-public class DashboardController{
+public class DashboardController {
     private final TrialUserManager trialUserManager;
     private final UserRepository repo;
 
@@ -37,14 +38,13 @@ public class DashboardController{
     public String adminDashboard(Model page, Authentication auth) {
         String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
         page.addAttribute("username", username);
-
+        page.addAttribute("number_of_removed_users", null);
         return "public/dashboard/admin";
     }
 
     @GetMapping("/dashboard")
     public String dashboardHandler(Authentication auth) {
         String returnPage = "";
-        System.out.println("Autorità dell'utente: " + auth.getAuthorities());
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"))) {
             returnPage = "forward:/dashboard/prova";
         } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
@@ -73,5 +73,14 @@ public class DashboardController{
         page.addAttribute("users", allUsers);
 
         return "public/dashboard/user_list";
+    }
+
+    @GetMapping("/dashboard/remove_expired_users")
+    public String removeExpiredUsers(Model page, Authentication auth) {
+        User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
+        int numberOfRemovedUsers = repo.removeExpiredUsers();
+        page.addAttribute("number_of_removed_users", numberOfRemovedUsers);
+        page.addAttribute("username", authUser.getUsername());
+        return "public/dashboard/admin";
     }
 }

@@ -42,6 +42,7 @@ public class SecurityConfig {
                     .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
                     .requestMatchers("/dashboard/admin").hasRole("ADMIN")
                     .requestMatchers("/dashboard/user_list").hasRole("ADMIN")
+                    .requestMatchers("/dashboard/remove_expired_users").hasRole("ADMIN")
                     .requestMatchers("/dashboard/profile").hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
                     .anyRequest().permitAll()
         );
