@@ -36,7 +36,12 @@ public class SecurityConfig {
                         .failureForwardUrl("/loginFailure")
         );
 
-        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        http.authorizeHttpRequests(auth ->
+                auth.requestMatchers("/dashboard")
+                        .hasAnyRole("USER_ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
+                .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
+                .anyRequest().permitAll()
+        );
 
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();

@@ -7,7 +7,9 @@
 <body class="bg-light">
     <th:block th:insert="~{snippets/navbar}" />
     <div class="container">
-        <h2 class="text-center">Il logout è avvenuto con successo!</h2>
+        <h1>DASHBOARD UTENTE PROVA</h1>
+        <p>Allenamenti gratuiti utilizzati: <th:block th:text="${allenamenti}" />/3</p>
+        <a class="btn btn-primary" href="/dashboard/profile" role="button">Visualizza profilo</a>
     </div>
 </body>
 </html>
