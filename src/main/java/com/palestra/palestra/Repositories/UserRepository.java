@@ -4,6 +4,7 @@ import com.palestra.palestra.pojo.SecurityUser;
 import com.palestra.palestra.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
@@ -44,9 +45,31 @@ public class UserRepository {
         );
     }
 
-
     public boolean userExists(String username) {
         return userDetailsManager.userExists(username);
     }
 
+    public int getTotalTrainingProgramsUsed(String username) {
+        final String sql = "SELECT times FROM UserUsageStatistics WHERE username = ?";
+        RowMapper<Integer> rm = (r, i) -> r.getInt(1);
+
+        return jdbc.query(sql, rm, username).stream().mapToInt(i -> i).sum();
+    }
+
+    public User getUserDetails(String username) {
+        final String sql = "SELECT * FROM UserData WHERE username = ?";
+        RowMapper<User> rm = (r, i) -> {
+            return new User(
+                    r.getString(2),
+                    r.getString(3),
+                    r.getString(5),
+                    r.getString(1),
+                    "REDACTED",
+                    r.getDate(6).toLocalDate(),
+                    ""
+            );
+        };
+
+        return jdbc.query(sql, rm, username).getFirst();
+    }
 }

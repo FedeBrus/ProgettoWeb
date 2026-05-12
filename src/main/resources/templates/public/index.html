@@ -2,19 +2,19 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <th:block th:include="snippets/head" />
+    <th:block th:insert="~{snippets/head}" />
 </head>
 
 <body class="bg-light">
     <!-- Navbar -->
-    <th:block th:include="snippets/navbar" />
+    <th:block th:insert="~{snippets/navbar}" />
     <div class="container py-4">
 
 
         <!-- Titolo e immagine -->
         <div class="text-center my-5">
             <h1 class="display-4 fw-bold mb-4">
-                Benvenuto a <span th:insert="SharedTitle"></span>!
+                Benvenuto a <span th:insert="~{SharedTitle}"></span>!
             </h1>
             <div class="row justify-content-center">
                 <div class="col">
@@ -49,7 +49,7 @@
                     Indirizzo: Via dei Pomi, 2
                 </p>
                 <p class="col-md mb-2 mb-md-0">
-                    Email: <th:block th:include="SharedTitle" />@palestra.com
+                    Email: <th:block th:insert="~{SharedTitle}" />@palestra.com
                 </p>
 
                 <p class="col-md mb-0">

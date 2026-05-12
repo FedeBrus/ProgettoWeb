@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+    <th:block th:insert="~{snippets/navbar}" />
+    <div class="container">
+        <h3>Profilo di <th:block th:text="${username}"/></h3>
+        <p><b>Nome</b>: <th:block th:text="${name}"/></p>
+        <p><b>Cognome</b>: <th:block th:text="${surname}"/></p>
+        <p><b>Data di nascita</b>: <th:block th:text="${dob}"/></p>
+        <p><b>Ruolo</b>: <th:block th:text="${role}"/></p>
+        <a class="btn btn-primary my-4" href="/dashboard" role="button">Torna alla dashboard</a>
+    </div>
+</body>
+</html>
