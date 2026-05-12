@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -64,5 +65,13 @@ public class DashboardController{
         page.addAttribute("role", authUser.getAuthorities().iterator().next().toString());
 
         return "public/dashboard/view_profile";
+    }
+
+    @GetMapping("/dashboard/user_list")
+    public String userList(Model page) {
+        List<com.palestra.palestra.pojo.User> allUsers = repo.getAllUserDetails();
+        page.addAttribute("users", allUsers);
+
+        return "public/dashboard/user_list";
     }
 }

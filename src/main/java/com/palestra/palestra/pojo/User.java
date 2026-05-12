@@ -13,6 +13,7 @@ public class User {
     private LocalDate date_of_birth;
     private LocalDate reg_date;
     private String role;
+    private boolean enabled;
 
     public User() {
     }
@@ -25,6 +26,19 @@ public class User {
         this.password = password;
         this.date_of_birth = date_of_birth;
         this.role = role;
+        this.enabled = true;
+    }
+
+    public User(String name, String surname, String email, String username, String password, LocalDate date_of_birth, String role, LocalDate registrationDate, boolean enabled) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.date_of_birth = date_of_birth;
+        this.role = role;
+        this.reg_date = registrationDate;
+        this.enabled = enabled;
     }
 
     public int getId() {
@@ -97,5 +111,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }
