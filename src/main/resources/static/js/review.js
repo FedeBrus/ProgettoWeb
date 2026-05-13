@@ -22,6 +22,8 @@ form.addEventListener("submit", e => {
         if(d.status === 200) {
             alertElement.classList += "alert-success";
             alertElement.textContent = "Recensione aggiunta con successo!";
+            refreshCarousel(reviewTextArea.value); // Dal file [carousel.js]
+
             reviewTextArea.value = "";
         } else {
             alertElement.classList += "alert-danger";
