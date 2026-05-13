@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/dashboard/upgrade").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
                 .requestMatchers("/dashboard/upgrade/basic").hasAnyRole("USER_PROVA")
                 .requestMatchers("/dashboard/upgrade/pro").hasAnyRole("USER_PROVA", "USER_BASIC")
+                .requestMatchers("/dashboard/review").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
                 .anyRequest().permitAll()
         );
 

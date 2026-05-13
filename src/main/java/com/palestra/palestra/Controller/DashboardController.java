@@ -108,4 +108,9 @@ public class DashboardController{
         }
         return "public/dashboard/change_password";
     }
+
+    @GetMapping("/dashboard/review")
+    public String reviewForm() {
+        return "public/dashboard/review";
+    }
 }
