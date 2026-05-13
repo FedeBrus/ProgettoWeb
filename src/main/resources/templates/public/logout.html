@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+    <th:block th:insert="~{snippets/navbar}" />
+    <div class="container">
+        <h1 class="text-primary text-center">Hai effettuato il logout</h1>
+        <a th:href="@{/}" class="btn btn-primary d-block text-center mx-auto w-25">Vai alla pagina iniziale</a>
+    </div>
+</body>
+</html>
