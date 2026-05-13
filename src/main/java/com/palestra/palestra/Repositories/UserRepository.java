@@ -96,22 +96,7 @@ public class UserRepository {
 
     @Transactional
     public int removeExpiredUsers() {
-        String sql = "SELECT USERNAME FROM USERS WHERE ENABLED = FALSE";
-        RowMapper<String> rm = (r, i) -> {
-            return r.getString(1);
-        };
-
-        List<String> usersToBeDeleted = jdbc.query(sql, rm);
-
-        String sql_remove_from_users = "DELETE FROM USERS WHERE USERNAME = ?";
-        String sql_remove_from_userdata = "DELETE FROM USERDATA WHERE USERNAME = ?";
-        String sql_remove_from_authorities = "DELETE FROM AUTHORITIES WHERE USERNAME = ?";
-        for (String username : usersToBeDeleted) {
-            jdbc.update(sql_remove_from_users, username);
-            jdbc.update(sql_remove_from_userdata, username);
-            jdbc.update(sql_remove_from_authorities, username);
-        }
-
-        return usersToBeDeleted.size();
+        String sql = "DELETE FROM USERS WHERE ENABLED = FALSE";
+        return jdbc.update(sql);
     }
 }
