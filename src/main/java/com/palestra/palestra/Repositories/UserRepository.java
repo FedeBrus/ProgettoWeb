@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -97,5 +98,31 @@ public class UserRepository {
         };
 
         return jdbc.query(sql, rm, username).getFirst();
+    }
+
+    @Transactional
+    public List<User> getAllUserDetails() {
+        final String sql = "SELECT ud.USERNAME, NAME, SURNAME, DATE_OF_BIRTH, EMAIL, REG_DATE, AUTHORITY, ENABLED FROM USERDATA AS ud JOIN AUTHORITIES AS auth ON auth.USERNAME = ud.USERNAME JOIN USERS AS u ON ud.USERNAME = u.USERNAME ORDER BY AUTHORITY, REG_DATE";
+        RowMapper<User> rm = (r, i) -> {
+            return new User(
+                r.getString(2),
+                r.getString(3),
+                r.getString(5),
+                r.getString(1),
+                "REDACTED",
+                r.getDate(4).toLocalDate(),
+                r.getString(7),
+                r.getDate(6).toLocalDate(),
+                r.getBoolean(8)
+            );
+        };
+
+        return jdbc.query(sql, rm);
+    }
+
+    @Transactional
+    public int removeExpiredUsers() {
+        String sql = "DELETE FROM USERS WHERE ENABLED = FALSE";
+        return jdbc.update(sql);
     }
 }

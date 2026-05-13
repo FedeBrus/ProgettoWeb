@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+<th:block th:insert="~{snippets/navbar}" />
+    <div class="container">
+        <h1 class="text-center text-primary">DASHBOARD ADMIN</h1>
+        <h3>Benvenuto <th:block th:text="${username}"/></h3>
+    </div>
+    <div class="container">
+        <div class="d-flex align-content-center justify-content-around">
+            <a class="btn btn-primary" href="/dashboard/user_list">Lista utenti</a>
+            <a class="btn btn-primary" href="/dashboard/remove_expired_users">Rimuovi utenti scaduti</a>
+            <a class="btn btn-primary">Statistiche</a>
+        </div>
+
+        <div th:if="${number_of_removed_users != null}" th:text="|Sono stati rimossi ${number_of_removed_users} utenti|" class="alert alert-warning my-2" role="alert"></div>
+    </div>
+</body>
+</html>
