@@ -2,14 +2,19 @@ package com.palestra.palestra.Controller;
 
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
+import com.palestra.palestra.Services.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,11 +23,13 @@ import java.util.Objects;
 public class DashboardController {
     private final TrialUserManager trialUserManager;
     private final UserRepository repo;
+    private final UserUtils utils;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
+        this.utils = utils;
     }
 
     @GetMapping("/dashboard/prova")
@@ -82,5 +89,52 @@ public class DashboardController {
         page.addAttribute("number_of_removed_users", numberOfRemovedUsers);
         page.addAttribute("username", authUser.getUsername());
         return "public/dashboard/admin";
+    }
+  
+    @GetMapping("/dashboard/upgrade")
+    public String upgradeProfile(Model page, Authentication auth) {
+        page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
+        return "public/dashboard/upgrade";
+    }
+
+    public String updateProfile(Model page, Authentication auth, String newRole) {
+        User u = (User) Objects.requireNonNull(auth.getPrincipal());
+        try {
+            auth = utils.changeRole(u.getUsername(), new SimpleGrantedAuthority(newRole), auth);
+            page.addAttribute("success", true);
+        } catch (Exception e) {
+            page.addAttribute("success", false);
+        }
+
+        page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
+        return "public/dashboard/upgrade";
+    }
+
+    @PostMapping("/dashboard/upgrade/basic")
+    public String upgradeProfileBasic(Model page, Authentication auth) {
+        return updateProfile(page, auth, "ROLE_USER_BASIC");
+    }
+
+    @PostMapping("/dashboard/upgrade/pro")
+    public String upgradeProfilePro(Model page, Authentication auth) {
+        return updateProfile(page, auth, "ROLE_USER_PRO");
+    }
+
+    @GetMapping("/dashboard/change_password")
+    public String changePassword(Model page, Authentication auth) {
+        return "public/dashboard/change_password";
+    }
+
+    @PostMapping("/dashboard/change_password")
+    public String changePasswordPost(Model page,
+                                     Authentication auth,
+                                     @RequestParam String password) {
+        User u = (User) auth.getPrincipal();
+        if(utils.changePassword(Objects.requireNonNull(u).getUsername(), password)) {
+            page.addAttribute("success", true);
+        } else {
+            page.addAttribute("success", false);
+        }
+        return "public/dashboard/change_password";
     }
 }
