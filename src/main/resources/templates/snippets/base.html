@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, footer, additionalContainerClasses)">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+<th:block th:insert="~{snippets/navbar}" />
+
+<div th:class="'container ' + ${additionalContainerClasses}">
+    <!-- Replaced with the actual page content -->
+    <th:block th:replace="${content}" />
+
+    <th:block th:insert="~{snippets/review_carousel}" />
+
+    <!-- Optional footer -->
+    <th:block th:replace="${footer} ?: _" />
+</div>
+</body>
+</html>

@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-<th:block th:insert="~{snippets/navbar}" />
-<div class="container" id="container">
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
+<div id="container">
     <h1 class="text-center">Inizia un allenamento!</h1>
 
     <div class="container d-flex justify-content-around align-content-center">
@@ -16,9 +13,7 @@
     </div>
 
     <a class="btn btn-primary block my-2" href="/dashboard" role="button">Torna alla dashboard</a>
-    <!-- Carosello -->
-    <th:block th:insert="~{snippets/review_carousel}" />
 </div>
 <script th:src="@{/js/review.js}"></script>
-</body>
+</th:block>
 </html>

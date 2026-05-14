@@ -1,16 +1,8 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-    <th:block th:insert="~{snippets/navbar}" />
-    <div class="container">
-        <h2 class="text-center">Il logout è avvenuto con successo!</h2>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
 
-        <!-- Carosello -->
-        <th:block th:insert="~{snippets/review_carousel}" />
-    </div>
-</body>
+<th:block th:fragment="content">
+    <h2 class="text-center">Il logout è avvenuto con successo!</h2>
+</th:block>
 </html>
