@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+<th:block th:insert="~{snippets/navbar}" />
+<div class="container" id="container">
+    <h1 class="text-center">Inizia un allenamento!</h1>
+
+    <div class="container d-flex justify-content-around align-content-center">
+        <button th:each="program : ${defaultPrograms}" class="btn btn-primary">
+            <span th:text="${program.getName()}"></span>
+        </button>
+    </div>
+
+    <a class="btn btn-primary block my-2" href="/dashboard" role="button">Torna alla dashboard</a>
+    <!-- Carosello -->
+    <th:block th:insert="~{snippets/review_carousel}" />
+</div>
+<script th:src="@{/js/review.js}"></script>
+</body>
+</html>

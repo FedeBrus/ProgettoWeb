@@ -1,8 +1,10 @@
 package com.palestra.palestra.Controller;
 
+import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
+import com.palestra.palestra.pojo.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,12 +27,14 @@ public class DashboardController {
     private final TrialUserManager trialUserManager;
     private final UserRepository repo;
     private final UserUtils utils;
+    private final TrainingAPIClient trainingClient;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, TrainingAPIClient trainingClient) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
+        this.trainingClient = trainingClient;
     }
 
     @GetMapping("/dashboard/prova")
@@ -95,6 +100,13 @@ public class DashboardController {
     public String upgradeProfile(Model page, Authentication auth) {
         page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
         return "public/dashboard/upgrade";
+    }
+
+    @GetMapping("/dashboard/training")
+    public String defaultPrograms(Model page, Authentication auth) {
+        List<Program> defaultPrograms = trainingClient.getDefaultPrograms();
+        page.addAttribute("defaultPrograms", defaultPrograms);
+        return "public/dashboard/training";
     }
 
     public String updateProfile(Model page, Authentication auth, String newRole) {
