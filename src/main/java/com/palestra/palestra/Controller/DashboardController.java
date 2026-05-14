@@ -4,6 +4,7 @@ import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
+import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -107,6 +108,29 @@ public class DashboardController {
         List<Program> defaultPrograms = trainingClient.getDefaultPrograms();
         page.addAttribute("defaultPrograms", defaultPrograms);
         return "public/dashboard/training";
+    }
+
+    @GetMapping("/dashboard/training_details")
+    public String programDetails(Model page, Authentication auth, @RequestParam String programName) {
+        List<String> defaultProgramsNames = trainingClient.getDefaultPrograms().stream().map(Program::getName).toList();
+
+        if (defaultProgramsNames.contains(programName)) {
+            // Il programma è un programma default, quindi bisogna utilizzare le API Rest
+            List<Exercise> exercises = trainingClient.getProgramExercises(programName);
+
+            // Molto brutto (in un contesto reale andrebbero fatti più di 3 endpoint ma whatever)
+            int calories = trainingClient.getProgramCalories(
+                    trainingClient.getDefaultPrograms().get(defaultProgramsNames.indexOf(programName))
+            );
+
+            page.addAttribute("programName", programName);
+            page.addAttribute("exercises", exercises);
+            page.addAttribute("calories", calories);
+        } else {
+            // TODO: Fare la ricerca nel DB interno
+        }
+
+        return "public/dashboard/training_details";
     }
 
     public String updateProfile(Model page, Authentication auth, String newRole) {
