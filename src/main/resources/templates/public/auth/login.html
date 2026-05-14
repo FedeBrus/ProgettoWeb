@@ -22,6 +22,9 @@
         <div th:if="${failed}" class="alert alert-danger my-2" role="alert">
             #10: That user is not authenticated!
         </div>
+
+        <!-- Carosello -->
+        <th:block th:insert="~{snippets/review_carousel}" />
     </div>
 </body>
 </html>

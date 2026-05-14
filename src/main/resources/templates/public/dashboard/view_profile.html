@@ -13,6 +13,9 @@
         <p><b>Data di nascita</b>: <th:block th:text="${dob}"/></p>
         <p><b>Ruolo</b>: <th:block th:text="${role}"/></p>
         <a class="btn btn-primary my-4" href="/dashboard" role="button">Torna alla dashboard</a>
+
+        <!-- Carosello -->
+        <th:block th:insert="~{snippets/review_carousel}" />
     </div>
 </body>
 </html>

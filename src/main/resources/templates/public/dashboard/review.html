@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{snippets/head}" />
+</head>
+<body class="bg-light">
+<th:block th:insert="~{snippets/navbar}" />
+    <div class="container" id="container">
+        <h1 class="text-center">Lascia una recensione!</h1>
+
+        <!-- Il form verrà intercettato -->
+        <form id="reviewForm">
+            <div class="form-group my-2">
+                <label for="review">Recensione</label>
+                <textarea class="form-control" id="review"></textarea>
+                <small id="reviewHelp" class="form-text text-muted">Il tuo username verrà registrato insieme alla recensione</small>
+            </div>
+            <div class="container py-4">
+                <button type="submit" class="btn btn-primary">Invia</button>
+                <button type="reset" class="btn btn-danger">Reset</button>
+            </div>
+        </form>
+
+        <a class="btn btn-primary block my-2" href="/dashboard" role="button">Torna alla dashboard</a>
+
+        <!-- Carosello -->
+        <th:block th:insert="~{snippets/review_carousel}" />
+    </div>
+    <script th:src="@{/js/review.js}"></script>
+</body>
+</html>

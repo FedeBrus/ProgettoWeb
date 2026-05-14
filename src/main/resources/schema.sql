@@ -29,3 +29,9 @@ CREATE TABLE IF NOT EXISTS UserUsageStatistics (
     PRIMARY KEY(username, program),
     FOREIGN KEY (username) REFERENCES Users(username) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS Reviews(
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    username        VARCHAR(255) NOT NULL, -- Username non è chiave esterna per mantenere le recensioni quando viene cancellato l'account
+    review          TEXT NOT NULL
+);
