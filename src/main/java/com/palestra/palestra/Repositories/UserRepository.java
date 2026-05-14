@@ -86,13 +86,14 @@ public class UserRepository {
     public User getUserDetails(String username) {
         final String sql = "SELECT * FROM UserData WHERE username = ?";
         RowMapper<User> rm = (r, i) -> {
+            // String name, String surname, String email, String username, String password, LocalDate date_of_birth, String role
             return new User(
                     r.getString(2),
                     r.getString(3),
                     r.getString(5),
                     r.getString(1),
                     "REDACTED",
-                    r.getDate(6).toLocalDate(),
+                    r.getDate(4).toLocalDate(),
                     ""
             );
         };
