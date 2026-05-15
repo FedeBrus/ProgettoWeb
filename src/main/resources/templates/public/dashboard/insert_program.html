@@ -16,12 +16,19 @@
         <div id="exercises">
 
         </div>
-        <button id="addExercise" class="btn btn-success">Add a new exercise</button>
-        <div class="container py-4">
-            <button type="submit" class="btn btn-primary">Invia</button>
+        <button id="addExercise" class="btn btn-success">Aggiungi un nuovo esercizio</button>
+        <div class="py-4 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary ms-auto">Inserisci il nuovo programma</button>
         </div>
     </form>
     <script th:src="@{/js/add_exercise.js}"></script>
+    <div th:if="${success != null && success}" class="alert alert-success my-2" role="alert">
+        Il tuo programma è stato inserito, il numero totale di kcal è: <th:block th:text="${calories}" />
+    </div>
+
+    <div th:if="${success != null && !success}" class="alert alert-danger my-2" role="alert">
+        <th:block th:text="${reason}" />
+    </div>
 </th:block>
 
 </html>

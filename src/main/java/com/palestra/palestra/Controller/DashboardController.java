@@ -3,6 +3,7 @@ package com.palestra.palestra.Controller;
 import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.Repositories.CustomExerciseRepository;
 import com.palestra.palestra.Repositories.UserRepository;
+import com.palestra.palestra.Services.ProgramInserterService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
@@ -32,15 +34,15 @@ public class DashboardController {
     private final UserRepository repo;
     private final UserUtils utils;
     private final TrainingAPIClient trainingClient;
-    private final CustomExerciseRepository exerciseRepo;
+    private final ProgramInserterService programInserter;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, TrainingAPIClient trainingClient, CustomExerciseRepository exerciseRepo) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, TrainingAPIClient trainingClient, ProgramInserterService programInserter) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.trainingClient = trainingClient;
-        this.exerciseRepo = exerciseRepo;
+        this.programInserter = programInserter;
     }
 
     @GetMapping("/dashboard/prova")
@@ -179,19 +181,21 @@ public class DashboardController {
     @PostMapping("/dashboard/insert_program")
     public String insertProgramInDB(
             @RequestParam String programName,
-            @RequestParam String exercises
+            @RequestParam String exercises,
+            Model page
     ) {
+        boolean success = true;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            List<Exercise> exerciseList = mapper.readValue(exercises, new TypeReference<List<Exercise>>(){});
-
-            System.out.println(programName);
-            System.out.println(exerciseList);
-            System.out.println(exerciseList.get(0)); // Assuming getter exists
-            exerciseRepo.addProgram(programName, exerciseList);
-        } catch (Exception e) {
-            e.printStackTrace();
+            int calories = programInserter.addProgramToDB(programName, exercises);
+            page.addAttribute("calories", calories);
+        } catch (JacksonException e) {
+            success = false;
+            page.addAttribute("reason", "L'input inviato non è valido!");
+        } catch (IllegalStateException e) {
+            success = false;
+            page.addAttribute("reason", "Esiste già un programma con quel nome!");
         }
+        page.addAttribute("success", success);
         return "public/dashboard/insert_program";
     }
 }
