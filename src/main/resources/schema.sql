@@ -22,6 +22,16 @@ CREATE TABLE IF NOT EXISTS UserData(
     FOREIGN KEY (username) REFERENCES Users(username) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS Exercises(
+    name            VARCHAR(255) NOT NULL,
+    sets            INT NOT NULL,
+    reps            INT NOT NULL,
+    kcal            INT NOT NULL,
+    program_name    VARCHAR(255) NOT NULL,
+    PRIMARY KEY (name, program_name)
+);
+
+
 CREATE TABLE IF NOT EXISTS UserUsageStatistics (
     username        VARCHAR(255) NOT NULL,
     program         VARCHAR(255) NOT NULL,
