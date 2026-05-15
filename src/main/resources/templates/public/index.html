@@ -1,65 +1,58 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, 'py-2')}">
 
-<body class="bg-light">
-    <!-- Navbar -->
-    <th:block th:insert="~{snippets/navbar}" />
-    <div class="container py-4">
-
-
-        <!-- Titolo e immagine -->
-        <div class="text-center my-5">
-            <h1 class="display-4 fw-bold mb-4">
-                Benvenuto a <span th:insert="~{SharedTitle}"></span>!
-            </h1>
-            <div class="row justify-content-center">
-                <div class="col">
-                    <img th:src="@{images/palestra.jpg}"
-                         alt="palestra"
-                         class="img-fluid rounded shadow">
-                </div>
-            </div>
-        </div>
-
-        <!-- Descrizione -->
-        <div class="row justify-content-center mb-5">
+<th:block th:fragment="content">
+    <!-- Titolo e immagine -->
+    <div class="text-center my-5">
+        <h1 class="display-4 fw-bold mb-4">
+            Benvenuto a <span th:insert="~{SharedTitle}"></span>!
+        </h1>
+        <div class="row justify-content-center">
             <div class="col">
-                <h4 class="text-secondary lh-base">
-                    Vuoi cominciare ad allenarti ma <i>non sai da dove cominciare</i>? Questa webapp fa al caso <b>tuo</b>!
-                    Con <i>molti</i> programmi di allenamento appositamente creati, potrai subito cominciare a metterti in forma!
-                </h4>
-                <h5 class="text-secondary lh-base">
-                    Il nostro sistema di statistiche garantirà di ottenere una performance migliore dai tuoi allenamenti
-                </h5>
-                <p class="text-secondary lh-base">
-                    Passando inoltre al piano <b>PRO</b>, potrai inoltre definire i tuoi allenamenti personalizzati,
-                    con il calcolo delle KCal fatto automaticamente dalla nostra API!
-                </p>
+                <img th:src="@{images/palestra.jpg}"
+                     alt="palestra"
+                     class="img-fluid rounded shadow">
             </div>
         </div>
-
-        <!-- Carosello -->
-        <th:block th:insert="~{snippets/review_carousel}" />
-
-        <!-- Footer -->
-        <footer class="bg-white border rounded shadow-sm mt-4 py-4">
-            <div class="row text-center">
-                <p class="col-md mb-2 mb-md-0">
-                    Indirizzo: Via dei Pomi, 2
-                </p>
-                <p class="col-md mb-2 mb-md-0">
-                    Email: <th:block th:insert="~{SharedTitle}" />@palestra.com
-                </p>
-
-                <p class="col-md mb-0">
-                    P. IVA: IT13583L19232
-                </p>
-            </div>
-        </footer>
     </div>
-</body>
+
+    <!-- Descrizione -->
+    <div class="row justify-content-center mb-5">
+        <div class="col">
+            <h4 class="text-secondary lh-base">
+                Vuoi cominciare ad allenarti ma <i>non sai da dove cominciare</i>? Questa webapp fa al caso <b>tuo</b>!
+                Con <i>molti</i> programmi di allenamento appositamente creati, potrai subito cominciare a metterti in forma!
+            </h4>
+            <h5 class="text-secondary lh-base">
+                Il nostro sistema di statistiche garantirà di ottenere una performance migliore dai tuoi allenamenti
+            </h5>
+            <p class="text-secondary lh-base">
+                Passando inoltre al piano <b>PRO</b>, potrai inoltre definire i tuoi allenamenti personalizzati,
+                con il calcolo delle KCal fatto automaticamente dalla nostra API!
+            </p>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="footer">
+    <!-- Footer -->
+    <footer class="bg-white border rounded shadow-sm mt-4 py-4">
+        <div class="row text-center">
+            <p class="col-md mb-2 mb-md-0">
+                Indirizzo: Via dei Pomi, 2
+            </p>
+            <p class="col-md mb-2 mb-md-0">
+                Email: <th:block th:insert="~{SharedTitle}" />@palestra.com
+            </p>
+
+            <p class="col-md mb-0">
+                P. IVA: IT13583L19232
+            </p>
+        </div>
+    </footer>
+</th:block>
 </html>
+
+
+
