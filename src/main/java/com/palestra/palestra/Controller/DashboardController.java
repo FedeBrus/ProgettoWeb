@@ -1,9 +1,11 @@
 package com.palestra.palestra.Controller;
 
 import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
+import com.palestra.palestra.Repositories.CustomExerciseRepository;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
+import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,13 +32,15 @@ public class DashboardController {
     private final UserRepository repo;
     private final UserUtils utils;
     private final TrainingAPIClient trainingClient;
+    private final CustomExerciseRepository exerciseRepo;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, TrainingAPIClient trainingClient) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, TrainingAPIClient trainingClient, CustomExerciseRepository exerciseRepo) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.trainingClient = trainingClient;
+        this.exerciseRepo = exerciseRepo;
     }
 
     @GetMapping("/dashboard/prova")
@@ -44,6 +50,14 @@ public class DashboardController {
         page.addAttribute("username", username);
 
         return "public/dashboard/prova";
+    }
+
+    @GetMapping("/dashboard/pro")
+    public String proDashboard(Model page, Authentication auth) {
+        String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
+        page.addAttribute("username", username);
+
+        return "public/dashboard/pro";
     }
 
     @GetMapping("/dashboard/admin")
@@ -59,6 +73,8 @@ public class DashboardController {
         String returnPage = "";
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"))) {
             returnPage = "forward:/dashboard/prova";
+        } else if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
+            returnPage = "forward:/dashboard/pro";
         } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             returnPage = "forward:/dashboard/admin";
         }
@@ -153,5 +169,29 @@ public class DashboardController {
     @GetMapping("/dashboard/review")
     public String reviewForm() {
         return "public/dashboard/review";
+    }
+
+    @GetMapping("/dashboard/insert_program")
+    public String insertProgramForm() {
+        return "public/dashboard/insert_program";
+    }
+
+    @PostMapping("/dashboard/insert_program")
+    public String insertProgramInDB(
+            @RequestParam String programName,
+            @RequestParam String exercises
+    ) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Exercise> exerciseList = mapper.readValue(exercises, new TypeReference<List<Exercise>>(){});
+
+            System.out.println(programName);
+            System.out.println(exerciseList);
+            System.out.println(exerciseList.get(0)); // Assuming getter exists
+            exerciseRepo.addProgram(programName, exerciseList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "public/dashboard/insert_program";
     }
 }

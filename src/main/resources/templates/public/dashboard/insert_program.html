@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
+    <h1 class="text-center">Inserisci un nuovo programma</h1>
+
+    <form id="addProgramForm" action="" method="post">
+        <!-- Nome programma -->
+        <div class="mb-3">
+            <label for="pName" class="form-label">Nome programma</label>
+            <input type="text" class="form-control" id="pName" name="programName" required>
+        </div>
+
+        <!-- Esercizi -->
+        <div id="exercises">
+
+        </div>
+        <button id="addExercise" class="btn btn-success">Add a new exercise</button>
+        <div class="container py-4">
+            <button type="submit" class="btn btn-primary">Invia</button>
+        </div>
+    </form>
+    <script th:src="@{/js/add_exercise.js}"></script>
+</th:block>
+
+</html>
