@@ -117,6 +117,13 @@ public class DashboardController {
         return "public/dashboard/training_details";
     }
 
+    @GetMapping("/dashboard/complete_training")
+    public String completeProgram(Model page, Authentication auth, @RequestParam String programName) {
+        User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
+        repo.completeProgram(authUser.getUsername(), programName);
+        return "forward:/dashboard";
+    }
+
     public String updateProfile(Model page, Authentication auth, String newRole) {
         User u = (User) Objects.requireNonNull(auth.getPrincipal());
         try {

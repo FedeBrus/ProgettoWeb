@@ -28,6 +28,10 @@
     </table>
 
     <p th:text="|Questo programma ha un totale di ${calories} calorie|"></p>
+
+    <div class="d-flex justify-content-around align-items-center">
+        <a class="btn btn-primary" th:href="@{/dashboard/complete_training(programName=${programName})}">Completa l'allenamento</a>
+    </div>
     <th:block th:insert="~{snippets/review_carousel}" />
 </div>
 <script th:src="@{/js/review.js}"></script>
