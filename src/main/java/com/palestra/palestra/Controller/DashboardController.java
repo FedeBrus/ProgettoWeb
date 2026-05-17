@@ -1,22 +1,18 @@
 package com.palestra.palestra.Controller;
 
-import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.Repositories.UserRepository;
+import com.palestra.palestra.Services.ProgramService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.Program;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,14 +24,14 @@ public class DashboardController {
     private final TrialUserManager trialUserManager;
     private final UserRepository repo;
     private final UserUtils utils;
-    private final TrainingAPIClient trainingClient;
+    private final ProgramService programService;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, TrainingAPIClient trainingClient) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
-        this.trainingClient = trainingClient;
+        this.programService = programService;
     }
 
     @GetMapping("/dashboard/prova")
@@ -105,31 +101,19 @@ public class DashboardController {
 
     @GetMapping("/dashboard/training")
     public String defaultPrograms(Model page, Authentication auth) {
-        List<Program> defaultPrograms = trainingClient.getDefaultPrograms();
+        List<Program> defaultPrograms = programService.getDefaultPrograms();
         page.addAttribute("defaultPrograms", defaultPrograms);
         return "public/dashboard/training";
     }
 
     @GetMapping("/dashboard/training_details")
     public String programDetails(Model page, Authentication auth, @RequestParam String programName) {
-        List<String> defaultProgramsNames = trainingClient.getDefaultPrograms().stream().map(Program::getName).toList();
+        List<Exercise> exercises = programService.getProgramExercises(programName);
+        int calories = programService.getProgramCalories(programName);
 
-        if (defaultProgramsNames.contains(programName)) {
-            // Il programma è un programma default, quindi bisogna utilizzare le API Rest
-            List<Exercise> exercises = trainingClient.getProgramExercises(programName);
-
-            // Molto brutto (in un contesto reale andrebbero fatti più di 3 endpoint ma whatever)
-            int calories = trainingClient.getProgramCalories(
-                    trainingClient.getDefaultPrograms().get(defaultProgramsNames.indexOf(programName))
-            );
-
-            page.addAttribute("programName", programName);
-            page.addAttribute("exercises", exercises);
-            page.addAttribute("calories", calories);
-        } else {
-            // TODO: Fare la ricerca nel DB interno
-        }
-
+        page.addAttribute("programName", programName);
+        page.addAttribute("exercises", exercises);
+        page.addAttribute("calories", calories);
         return "public/dashboard/training_details";
     }
 
