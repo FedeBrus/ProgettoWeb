@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-<th:block th:insert="~{snippets/navbar}" />
-<div class="container" id="container">
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
     <h3 class="text-center my-5" th:text="|Dettagli del programma ${programName}|"></h3>
     <table class="table table-striped">
         <thead>
@@ -32,8 +28,5 @@
     <div class="d-flex justify-content-around align-items-center">
         <a class="btn btn-primary" th:href="@{/dashboard/complete_training(programName=${programName})}">Completa l'allenamento</a>
     </div>
-    <th:block th:insert="~{snippets/review_carousel}" />
-</div>
-<script th:src="@{/js/review.js}"></script>
-</body>
+</th:block>
 </html>

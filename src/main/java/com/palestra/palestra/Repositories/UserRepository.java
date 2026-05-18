@@ -103,12 +103,19 @@ public class UserRepository {
 
     @Transactional
     public void completeProgram(String username, String programName) {
+        List<Integer> tempList = jdbc.query("SELECT times FROM UserUsageStatistics WHERE username = ? AND program = ?",
+                (r, i) -> r.getInt(1),
+                username,
+                programName);
+
+        int oldValue = tempList.isEmpty() ? 0 : tempList.getFirst();
+
         String sql = """
             MERGE INTO UserUsageStatistics KEY(username, program)
-            VALUES (?, ?, 1)
+            VALUES (?, ?, ?)
         """;
 
-        jdbc.update(sql, username, programName);
+        jdbc.update(sql, username, programName, (oldValue + 1));
     }
 
     @Transactional
