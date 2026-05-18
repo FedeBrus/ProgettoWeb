@@ -4,19 +4,44 @@
 
 <th:block th:fragment="content">
     <h3 class="text-center my-5" th:text="|Statistiche di ${username}|"></h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Program</th>
-                <th>Times</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="entry : ${personal_stats}">
-                <td th:text="${entry.getProgram()}"></td>
-                <td th:text="${entry.getTimes()}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div>
+        <!-- Actual voodoo -->
+        <canvas
+            id="programChart"
+            th:data-labels="${labels}"
+            th:data-values="${values}"
+        >
+        </canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('programChart');
+
+        // Ձողի վրա գտնվող յուրաքանչյուր տոտեմ մեկ ընտանիքի խորհրդանշական պատկեր է
+        const labelsRaw = ctx.dataset.labels.replace('[', '').replace(']', '');
+        const labels = labelsRaw.split(',').map(s => s.trim());
+        const valuesRaw = ctx.dataset.values.replace('[', '').replace(']', '');
+        const values = valuesRaw.split(',').map(Number);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# di allenamenti',
+                    data: values,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </th:block>
 </html>
+

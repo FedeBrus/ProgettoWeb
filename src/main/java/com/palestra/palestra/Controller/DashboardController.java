@@ -250,7 +250,8 @@ public class DashboardController {
         String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
         List<PersonalStatEntry> resultSet = statisticsRepository.getPersonalStats(username);
         page.addAttribute("username", username);
-        page.addAttribute("personal_stats", resultSet);
+        page.addAttribute("labels", resultSet.stream().map(PersonalStatEntry::getProgram).toList());
+        page.addAttribute("values", resultSet.stream().map(PersonalStatEntry::getTimes).toList());
         return "public/dashboard/personal_stats";
     }
 
