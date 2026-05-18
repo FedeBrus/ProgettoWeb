@@ -102,6 +102,16 @@ public class UserRepository {
     }
 
     @Transactional
+    public void completeProgram(String username, String programName) {
+        String sql = """
+            MERGE INTO UserUsageStatistics KEY(username, program)
+            VALUES (?, ?, 1)
+        """;
+
+        jdbc.update(sql, username, programName);
+    }
+
+    @Transactional
     public List<User> getAllUserDetails() {
         final String sql = "SELECT ud.USERNAME, NAME, SURNAME, DATE_OF_BIRTH, EMAIL, REG_DATE, AUTHORITY, ENABLED FROM USERDATA AS ud JOIN AUTHORITIES AS auth ON auth.USERNAME = ud.USERNAME JOIN USERS AS u ON ud.USERNAME = u.USERNAME ORDER BY AUTHORITY, REG_DATE";
         RowMapper<User> rm = (r, i) -> {

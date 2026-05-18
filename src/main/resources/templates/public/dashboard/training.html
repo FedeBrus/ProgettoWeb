@@ -7,9 +7,9 @@
     <h1 class="text-center">Inizia un allenamento!</h1>
 
     <div class="container d-flex justify-content-around align-content-center">
-        <button th:each="program : ${defaultPrograms}" class="btn btn-primary">
+        <a th:each="program : ${defaultPrograms}" class="btn btn-primary" th:href="@{/dashboard/training_details(programName=${program.getName()})}">
             <span th:text="${program.getName()}"></span>
-        </button>
+        </a>
     </div>
 
     <a class="btn btn-primary block my-2" href="/dashboard" role="button">Torna alla dashboard</a>

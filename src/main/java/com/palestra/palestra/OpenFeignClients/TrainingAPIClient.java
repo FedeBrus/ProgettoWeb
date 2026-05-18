@@ -3,10 +3,7 @@ package com.palestra.palestra.OpenFeignClients;
 import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.Program;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,8 +12,8 @@ public interface TrainingAPIClient {
     @GetMapping("/default")
     List<Program> getDefaultPrograms();
 
-    @GetMapping("/default/{defaultProgramName}")
-    List<Exercise> getProgramExercises(@PathVariable String defaultProgramName);
+    @GetMapping("/details")
+    List<Exercise> getProgramExercises(@RequestParam String defaultProgramName);
 
     @PostMapping("/calories")
     int getProgramCalories(@RequestBody Program program);
