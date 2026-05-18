@@ -8,6 +8,7 @@ import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.GlobalStatEntry;
+import com.palestra.palestra.pojo.PersonalStatEntry;
 import com.palestra.palestra.pojo.Program;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,6 +243,16 @@ public class DashboardController {
         }
         page.addAttribute("success", success);
         return "public/dashboard/insert_program";
+    }
+
+    @GetMapping("/dashboard/personal_stats")
+    public String personalStats(Model page, Authentication auth) {
+        String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
+        List<PersonalStatEntry> resultSet = statisticsRepository.getPersonalStats(username);
+        page.addAttribute("username", username);
+        page.addAttribute("labels", resultSet.stream().map(PersonalStatEntry::getProgram).toList());
+        page.addAttribute("values", resultSet.stream().map(PersonalStatEntry::getTimes).toList());
+        return "public/dashboard/personal_stats";
     }
 
     @GetMapping("/dashboard/global_stats")
