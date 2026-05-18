@@ -125,12 +125,12 @@ public class DashboardController {
 
     @GetMapping("/dashboard/training")
     public String defaultPrograms(Model page, Authentication auth) {
-        List<Program> defaultPrograms = programService.getDefaultPrograms();
+        List<Program> programs = programService.getDefaultPrograms();
         if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
-            defaultPrograms.addAll(customPrograms.getCustomPrograms(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername()));
+            programs.addAll(customPrograms.getCustomPrograms(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername()));
         }
 
-        page.addAttribute("defaultPrograms", defaultPrograms);
+        page.addAttribute("defaultPrograms", programs);
         return "public/dashboard/training";
     }
 
