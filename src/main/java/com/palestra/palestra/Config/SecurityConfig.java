@@ -40,6 +40,8 @@ public class SecurityConfig {
                 auth
                 .requestMatchers("/dashboard").hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
                 .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
+                .requestMatchers("/dashboard/basic").hasRole("USER_BASIC")
+                .requestMatchers("/dashboard/pro").hasRole("USER_PRO")
                 .requestMatchers("/dashboard/admin").hasRole("ADMIN")
                 .requestMatchers("/dashboard/user_list").hasRole("ADMIN")
                 .requestMatchers("/dashboard/remove_expired_users").hasRole("ADMIN")

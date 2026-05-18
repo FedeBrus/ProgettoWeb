@@ -52,6 +52,14 @@ public class DashboardController {
         return "public/dashboard/prova";
     }
 
+    @GetMapping("/dashboard/basic")
+    public String basicDashboard(Model page, Authentication auth) {
+        String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
+        page.addAttribute("username", username);
+
+        return "public/dashboard/basic";
+    }
+
     @GetMapping("/dashboard/pro")
     public String proDashboard(Model page, Authentication auth) {
         String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
@@ -73,7 +81,9 @@ public class DashboardController {
         String returnPage = "";
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"))) {
             returnPage = "forward:/dashboard/prova";
-        } else if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
+        } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_BASIC"))) {
+            returnPage = "forward:/dashboard/basic";
+        } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
             returnPage = "forward:/dashboard/pro";
         } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             returnPage = "forward:/dashboard/admin";
