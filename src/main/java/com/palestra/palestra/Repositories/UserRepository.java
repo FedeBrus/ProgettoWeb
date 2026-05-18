@@ -16,8 +16,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Repository
@@ -110,6 +111,7 @@ public class UserRepository {
 
         jdbc.update(sql, username, programName);
     }
+
 
     @Transactional
     public List<User> getAllUserDetails() {

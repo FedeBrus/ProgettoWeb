@@ -1,15 +1,15 @@
 package com.palestra.palestra.Controller;
 
+import com.palestra.palestra.Repositories.StatisticsRepository;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.ProgramService;
-import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
-import com.palestra.palestra.Repositories.CustomExerciseRepository;
-import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.ProgramInserterService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
+import com.palestra.palestra.pojo.GlobalStatEntry;
 import com.palestra.palestra.pojo.Program;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,9 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import tools.jackson.core.JacksonException;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,14 +32,23 @@ public class DashboardController {
     private final UserUtils utils;
     private final ProgramService programService;
     private final ProgramInserterService programInserter;
+    private final StatisticsRepository statisticsRepository;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService, ProgramInserterService programInserter) {
+    public DashboardController(
+            TrialUserManager trialUserManager,
+            UserRepository repo,
+            UserUtils utils,
+            ProgramService programService,
+            ProgramInserterService programInserter,
+            StatisticsRepository statisticsRepository
+    ) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.programService = programService;
         this.programInserter = programInserter;
+        this.statisticsRepository = statisticsRepository;
     }
 
     @GetMapping("/dashboard/prova")
@@ -223,5 +231,12 @@ public class DashboardController {
         }
         page.addAttribute("success", success);
         return "public/dashboard/insert_program";
+    }
+
+    @GetMapping("/dashboard/global_stats")
+    public String globalStats(Model page) {
+        List<GlobalStatEntry> resultSet = statisticsRepository.getGlobalStatistics();
+        page.addAttribute("global_stats", resultSet);
+        return "public/dashboard/global_stats";
     }
 }
