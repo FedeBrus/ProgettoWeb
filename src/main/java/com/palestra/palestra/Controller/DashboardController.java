@@ -1,12 +1,15 @@
 package com.palestra.palestra.Controller;
 
+import com.palestra.palestra.Repositories.StatisticsRepository;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.ProgramService;
 import com.palestra.palestra.Services.CustomProgramService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
+import com.palestra.palestra.pojo.GlobalStatEntry;
 import com.palestra.palestra.pojo.Program;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import tools.jackson.core.JacksonException;
 
 import java.util.List;
@@ -28,14 +32,23 @@ public class DashboardController {
     private final UserUtils utils;
     private final ProgramService programService;
     private final CustomProgramService customPrograms;
+    private final StatisticsRepository statisticsRepository;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService, CustomProgramService customPrograms) {
+    public DashboardController(
+            TrialUserManager trialUserManager,
+            UserRepository repo,
+            UserUtils utils,
+            ProgramService programService,
+            CustomProgramService customPrograms,
+            StatisticsRepository statisticsRepository
+    ) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.programService = programService;
         this.customPrograms = customPrograms;
+        this.statisticsRepository = statisticsRepository;
     }
 
     @GetMapping("/dashboard/prova")
@@ -229,5 +242,12 @@ public class DashboardController {
         }
         page.addAttribute("success", success);
         return "public/dashboard/insert_program";
+    }
+
+    @GetMapping("/dashboard/global_stats")
+    public String globalStats(Model page) {
+        List<GlobalStatEntry> resultSet = statisticsRepository.getGlobalStatistics();
+        page.addAttribute("global_stats", resultSet);
+        return "public/dashboard/global_stats";
     }
 }

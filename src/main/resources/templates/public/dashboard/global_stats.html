@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
+    <h3 class="text-center my-5">Statistiche degli utenti</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Program</th>
+                <th>Average amount of times</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entry : ${global_stats}">
+                <td th:text="${entry.getRole()}"></td>
+                <td th:text="${entry.getProgram()}"></td>
+                <td th:text="${entry.getValue()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</th:block>
+</html>

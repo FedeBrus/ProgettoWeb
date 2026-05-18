@@ -16,8 +16,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Repository
@@ -103,20 +104,23 @@ public class UserRepository {
 
     @Transactional
     public void completeProgram(String username, String programName) {
-        List<Integer> tempList = jdbc.query("SELECT times FROM UserUsageStatistics WHERE username = ? AND program = ?",
-                (r, i) -> r.getInt(1),
-                username,
-                programName);
-
-        int oldValue = tempList.isEmpty() ? 0 : tempList.getFirst();
-
-        String sql = """
-            MERGE INTO UserUsageStatistics KEY(username, program)
-            VALUES (?, ?, ?)
+        String updateSql = """
+            UPDATE UserUsageStatistics 
+            SET times = times + 1 
+            WHERE username = ? AND program = ?
         """;
 
-        jdbc.update(sql, username, programName, (oldValue + 1));
+        int rowsAffected = jdbc.update(updateSql, username, programName);
+
+        if (rowsAffected == 0) {
+            String insertSql = """
+                INSERT INTO UserUsageStatistics (username, program, times) 
+                VALUES (?, ?, 1)
+            """;
+            jdbc.update(insertSql, username, programName);
+        }
     }
+
 
     @Transactional
     public List<User> getAllUserDetails() {

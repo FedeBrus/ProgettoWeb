@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .requestMatchers("/dashboard/pro").hasRole("USER_PRO")
                 .requestMatchers("/dashboard/admin").hasRole("ADMIN")
                 .requestMatchers("/dashboard/user_list").hasRole("ADMIN")
+                .requestMatchers("/dashboard/global_stats").hasRole("ADMIN")
                 .requestMatchers("/dashboard/remove_expired_users").hasRole("ADMIN")
                 .requestMatchers("/dashboard/training").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
                 .requestMatchers("/dashboard/training_details").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
