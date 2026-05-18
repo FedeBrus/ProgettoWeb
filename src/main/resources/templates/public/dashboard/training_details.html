@@ -3,30 +3,37 @@
       th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
 
 <th:block th:fragment="content">
-    <h3 class="text-center my-5" th:text="|Dettagli del programma ${programName}|"></h3>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Nome dell'esercizio</th>
-            <th>Set</th>
-            <th>Ripetizioni</th>
-            <th>kcal</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr th:each="exercise : ${exercises}">
-                <td th:text="${exercise.getName()}"></td>
-                <td th:text="${exercise.getSets()}"></td>
-                <td th:text="${exercise.getReps()}"></td>
-                <td th:text="${exercise.getKcal()}"></td>
+    <th:block th:if="${notFound == null}">
+        <h3 class="text-center my-5" th:text="|Dettagli del programma ${programName}|"></h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nome dell'esercizio</th>
+                <th>Set</th>
+                <th>Ripetizioni</th>
+                <th>kcal</th>
             </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <tr th:each="exercise : ${exercises}">
+                    <td th:text="${exercise.getName()}"></td>
+                    <td th:text="${exercise.getSets()}"></td>
+                    <td th:text="${exercise.getReps()}"></td>
+                    <td th:text="${exercise.getKcal()}"></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <p th:text="|Questo programma ha un totale di ${calories} calorie|"></p>
+        <p th:text="|Questo programma ha un totale di ${calories} calorie|"></p>
 
-    <div class="d-flex justify-content-around align-items-center">
-        <a class="btn btn-primary" th:href="@{/dashboard/complete_training(programName=${programName})}">Completa l'allenamento</a>
-    </div>
+        <div class="d-flex justify-content-around align-items-center">
+            <a class="btn btn-primary" th:href="@{/dashboard/complete_training(programName=${programName})}">Completa l'allenamento</a>
+        </div>
+    </th:block>
+    <th:block th:if="${notFound != null && notFound}">
+        <div class="alert alert-danger">
+            <h3>Il programma non è stato trovato</h3>
+        </div>
+    </th:block>
 </th:block>
 </html>

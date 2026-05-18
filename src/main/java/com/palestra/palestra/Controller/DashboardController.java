@@ -2,10 +2,7 @@ package com.palestra.palestra.Controller;
 
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.ProgramService;
-import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
-import com.palestra.palestra.Repositories.CustomExerciseRepository;
-import com.palestra.palestra.Repositories.UserRepository;
-import com.palestra.palestra.Services.ProgramInserterService;
+import com.palestra.palestra.Services.CustomProgramService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
@@ -20,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tools.jackson.core.JacksonException;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,15 +27,15 @@ public class DashboardController {
     private final UserRepository repo;
     private final UserUtils utils;
     private final ProgramService programService;
-    private final ProgramInserterService programInserter;
+    private final CustomProgramService customPrograms;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService, ProgramInserterService programInserter) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService, CustomProgramService customPrograms) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.programService = programService;
-        this.programInserter = programInserter;
+        this.customPrograms = customPrograms;
     }
 
     @GetMapping("/dashboard/prova")
@@ -131,14 +126,24 @@ public class DashboardController {
     @GetMapping("/dashboard/training")
     public String defaultPrograms(Model page, Authentication auth) {
         List<Program> defaultPrograms = programService.getDefaultPrograms();
+        if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
+            defaultPrograms.addAll(customPrograms.getCustomPrograms(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername()));
+        }
+
         page.addAttribute("defaultPrograms", defaultPrograms);
         return "public/dashboard/training";
     }
 
     @GetMapping("/dashboard/training_details")
     public String programDetails(Model page, Authentication auth, @RequestParam String programName) {
-        List<Exercise> exercises = programService.getProgramExercises(programName);
-        int calories = programService.getProgramCalories(programName);
+        List<Exercise> exercises = null;
+        int calories = 0;
+        try {
+            exercises = programService.getProgramExercises(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername(), programName);
+            calories = programService.getProgramCalories(((User) auth.getPrincipal()).getUsername(), programName);
+        } catch (ClassNotFoundException e) {
+            page.addAttribute("notFound", true);
+        }
 
         page.addAttribute("programName", programName);
         page.addAttribute("exercises", exercises);
@@ -150,7 +155,7 @@ public class DashboardController {
     public String completeProgram(Model page, Authentication auth, @RequestParam String programName) {
         User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
         repo.completeProgram(authUser.getUsername(), programName);
-        return "forward:/dashboard";
+        return "redirect:/dashboard";
     }
 
     public String updateProfile(Model page, Authentication auth, String newRole) {
@@ -208,11 +213,12 @@ public class DashboardController {
     public String insertProgramInDB(
             @RequestParam String programName,
             @RequestParam String exercises,
-            Model page
+            Model page,
+            Authentication auth
     ) {
         boolean success = true;
         try {
-            int calories = programInserter.addProgramToDB(programName, exercises);
+            int calories = customPrograms.addProgramToDB(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername(), programName, exercises);
             page.addAttribute("calories", calories);
         } catch (JacksonException e) {
             success = false;
