@@ -23,12 +23,14 @@ CREATE TABLE IF NOT EXISTS UserData(
 );
 
 CREATE TABLE IF NOT EXISTS Exercises(
+    username        VARCHAR(255) NOT NULL,
     name            VARCHAR(255) NOT NULL,
     sets            INT NOT NULL,
     reps            INT NOT NULL,
     kcal            INT NOT NULL,
     program_name    VARCHAR(255) NOT NULL,
-    PRIMARY KEY (name, program_name)
+    PRIMARY KEY (username, name, program_name),
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 

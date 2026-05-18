@@ -3,7 +3,7 @@ package com.palestra.palestra.Controller;
 import com.palestra.palestra.Repositories.StatisticsRepository;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.ProgramService;
-import com.palestra.palestra.Services.ProgramInserterService;
+import com.palestra.palestra.Services.CustomProgramService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
@@ -31,7 +31,7 @@ public class DashboardController {
     private final UserRepository repo;
     private final UserUtils utils;
     private final ProgramService programService;
-    private final ProgramInserterService programInserter;
+    private final CustomProgramService customPrograms;
     private final StatisticsRepository statisticsRepository;
 
     @Autowired
@@ -40,14 +40,14 @@ public class DashboardController {
             UserRepository repo,
             UserUtils utils,
             ProgramService programService,
-            ProgramInserterService programInserter,
+            CustomProgramService customPrograms,
             StatisticsRepository statisticsRepository
     ) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.programService = programService;
-        this.programInserter = programInserter;
+        this.customPrograms = customPrograms;
         this.statisticsRepository = statisticsRepository;
     }
 
@@ -138,15 +138,25 @@ public class DashboardController {
 
     @GetMapping("/dashboard/training")
     public String defaultPrograms(Model page, Authentication auth) {
-        List<Program> defaultPrograms = programService.getDefaultPrograms();
-        page.addAttribute("defaultPrograms", defaultPrograms);
+        List<Program> programs = programService.getDefaultPrograms();
+        if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
+            programs.addAll(customPrograms.getCustomPrograms(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername()));
+        }
+
+        page.addAttribute("defaultPrograms", programs);
         return "public/dashboard/training";
     }
 
     @GetMapping("/dashboard/training_details")
     public String programDetails(Model page, Authentication auth, @RequestParam String programName) {
-        List<Exercise> exercises = programService.getProgramExercises(programName);
-        int calories = programService.getProgramCalories(programName);
+        List<Exercise> exercises = null;
+        int calories = 0;
+        try {
+            exercises = programService.getProgramExercises(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername(), programName);
+            calories = programService.getProgramCalories(((User) auth.getPrincipal()).getUsername(), programName);
+        } catch (ClassNotFoundException e) {
+            page.addAttribute("notFound", true);
+        }
 
         page.addAttribute("programName", programName);
         page.addAttribute("exercises", exercises);
@@ -158,7 +168,7 @@ public class DashboardController {
     public String completeProgram(Model page, Authentication auth, @RequestParam String programName) {
         User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
         repo.completeProgram(authUser.getUsername(), programName);
-        return "forward:/dashboard";
+        return "redirect:/dashboard";
     }
 
     public String updateProfile(Model page, Authentication auth, String newRole) {
@@ -216,11 +226,12 @@ public class DashboardController {
     public String insertProgramInDB(
             @RequestParam String programName,
             @RequestParam String exercises,
-            Model page
+            Model page,
+            Authentication auth
     ) {
         boolean success = true;
         try {
-            int calories = programInserter.addProgramToDB(programName, exercises);
+            int calories = customPrograms.addProgramToDB(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername(), programName, exercises);
             page.addAttribute("calories", calories);
         } catch (JacksonException e) {
             success = false;

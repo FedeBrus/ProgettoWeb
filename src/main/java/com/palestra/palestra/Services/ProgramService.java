@@ -3,6 +3,7 @@ package com.palestra.palestra.Services;
 import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.Program;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
@@ -12,9 +13,12 @@ import java.util.List;
 @Service
 public class ProgramService {
     private final TrainingAPIClient trainingClient;
+    private final CustomProgramService customProgramService;
 
-    public ProgramService(TrainingAPIClient trainingClient) {
+    @Autowired
+    public ProgramService(TrainingAPIClient trainingClient, CustomProgramService customProgramService) {
         this.trainingClient = trainingClient;
+        this.customProgramService = customProgramService;
     }
 
     public List<Program> getDefaultPrograms() {
@@ -26,12 +30,11 @@ public class ProgramService {
         return defaultProgramsNames.contains(programName);
     }
 
-    public List<Exercise> getProgramExercises(String programName) {
+    public List<Exercise> getProgramExercises(String username, String programName) throws ClassNotFoundException {
         if (isDefaultProgram(programName)) {
             return trainingClient.getProgramExercises(programName);
         } else {
-            // TODO: Query al db interno
-            return null;
+            return customProgramService.getCustomProgram(username, programName).getExercises();
         }
     }
 
@@ -43,12 +46,12 @@ public class ProgramService {
         }).toList().getFirst();
     }
 
-    public int getProgramCalories(String programName) {
+    public int getProgramCalories(String username, String programName) throws ClassNotFoundException {
         Program p = null;
         if (isDefaultProgram(programName)) {
             p = getDefaultProgramFromName(programName);
         } else {
-            // TODO: Costruire il programma p a partire da una query sql al db interno
+            p = customProgramService.getCustomProgram(username, programName);
         }
 
         return trainingClient.getProgramCalories(p);
