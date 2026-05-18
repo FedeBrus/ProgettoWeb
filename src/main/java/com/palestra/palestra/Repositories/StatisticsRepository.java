@@ -1,6 +1,7 @@
 package com.palestra.palestra.Repositories;
 
 import com.palestra.palestra.pojo.GlobalStatEntry;
+import com.palestra.palestra.pojo.PersonalStatEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,4 +34,17 @@ public class StatisticsRepository {
         return jdbc.query(sql, rm);
     }
 
+    public List<PersonalStatEntry> getPersonalStats(String username) {
+        String sql = """
+            SELECT uus.program, uus.times
+            FROM UserUsageStatistics AS uus
+            WHERE uus.username = ?;
+        """;
+
+        RowMapper<PersonalStatEntry> rm = (r, i) -> {
+            return new PersonalStatEntry(r.getString(1), r.getInt(2));
+        };
+
+        return jdbc.query(sql, rm, username);
+    }
 }
