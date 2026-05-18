@@ -1,39 +1,30 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-    <th:block th:insert="~{snippets/navbar}" />
-    <div class="container">
-        <h1 class="text-center">Potenzia il tuo piano</h1>
-        <h2>Raggiungi nuove vette con i nostri piani da esperti</h2>
-        <p>Il tuo piano attuale è <th:block th:text="${role}" /></p>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
+    <h1 class="text-center">Potenzia il tuo piano</h1>
+    <h2>Raggiungi nuove vette con i nostri piani da esperti</h2>
+    <p>Il tuo piano attuale è <th:block th:text="${role}" /></p>
 
 
-        <form th:if="${role == 'USER_PROVA'}" action="/dashboard/upgrade/basic" method="post">
-            <input class="btn btn-success my-2" type="submit" value="Upgrade a piano BASIC">
-        </form>
+    <form th:if="${role == 'USER_PROVA'}" action="/dashboard/upgrade/basic" method="post">
+        <input class="btn btn-success my-2" type="submit" value="Upgrade a piano BASIC">
+    </form>
 
-        <form th:if="${role != 'USER_PRO'}" action="/dashboard/upgrade/pro" method="post">
-            <input class="btn btn-success my-2" type="submit" value="Upgrade a piano PRO">
-        </form>
+    <form th:if="${role != 'USER_PRO'}" action="/dashboard/upgrade/pro" method="post">
+        <input class="btn btn-success my-2" type="submit" value="Upgrade a piano PRO">
+    </form>
 
-        <p th:if="${role == 'USER_PRO'}">Hai già il piano migliore possibile!</p>
+    <p th:if="${role == 'USER_PRO'}">Hai già il piano migliore possibile!</p>
 
-        <a class="btn btn-primary block my-2" href="/dashboard" role="button">Torna alla dashboard</a>
+    <a class="btn btn-primary block my-2" href="/dashboard" role="button">Torna alla dashboard</a>
 
-        <div th:if="${success != null && success}" class="alert alert-success my-2" role="alert">
-            Il piano è stato aggiornato con successo a <th:block th:text="${role}"/>!
-        </div>
-        <div th:if="${success != null && !success}" class="alert alert-error my-2" role="alert">
-            Errore durante l'aggiornamento del piano
-        </div>
-
-        <!-- Carosello -->
-        <th:block th:insert="~{snippets/review_carousel}" />
-
+    <div th:if="${success != null && success}" class="alert alert-success my-2" role="alert">
+        Il piano è stato aggiornato con successo a <th:block th:text="${role}"/>!
     </div>
-</body>
+    <div th:if="${success != null && !success}" class="alert alert-error my-2" role="alert">
+        Errore durante l'aggiornamento del piano
+    </div>
+</th:block>
 </html>

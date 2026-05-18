@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
+    <h1 class="text-center text-primary">DASHBOARD UTENTE PRO</h1>
+    <h3>Benvenuto <th:block th:text="${username}"/></h3>
+    <a class="btn btn-primary block" href="/dashboard/profile" role="button">Visualizza profilo</a>
+    <a class="btn btn-primary block" href="/dashboard/change_password" role="button">Cambio password</a>
+    <a class="btn btn-primary block" href="/dashboard/training" role="button">Allenamento</a>
+    <a class="btn btn-primary block" href="/dashboard/insert_program" role="button">Inserisci programma</a>
+    <a class="btn btn-primary block" href="#" role="button">Visualizza statistiche</a>
+    <a class="btn btn-primary block" href="/dashboard/upgrade" role="button">Upgrade</a>
+    <a class="btn btn-primary block" href="/dashboard/review" role="button">Inserisci recensione</a>
+</th:block>
+
+</html>

@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-    <th:block th:insert="~{snippets/navbar}" />
-    <div class="container">
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
         <h1 class="text-center text-primary">DASHBOARD UTENTE PROVA</h1>
         <h3>Benvenuto <th:block th:text="${username}"/></h3>
         <p>Allenamenti gratuiti utilizzati: <th:block th:text="${allenamenti}" />/3</p>
@@ -15,9 +11,5 @@
         <a class="btn btn-primary block" th:href="@{/dashboard/training}" role="button">Allenamento</a>
         <a class="btn btn-primary block" href="/dashboard/upgrade" role="button">Upgrade</a>
         <a class="btn btn-primary block" href="/dashboard/review" role="button">Inserisci recensione</a>
-
-        <!-- Carosello -->
-        <th:block th:insert="~{snippets/review_carousel}" />
-    </div>
-</body>
+</th:block>
 </html>

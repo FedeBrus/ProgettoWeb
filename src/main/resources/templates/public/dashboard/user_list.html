@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-<th:block th:insert="~{snippets/navbar}" />
-    <div class="container">
-        <h3 class="text-center my-5">Lista degli utenti</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Role</th>
-                    <th>Registration Date</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Date of birth</th>
-                    <th>Enabled</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.getRole()}"></td>
-                    <td th:text="${user.getReg_date()}"></td>
-                    <td th:text="${user.getUsername()}"></td>
-                    <td th:text="${user.getName()}"></td>
-                    <td th:text="${user.getSurname()}"></td>
-                    <td th:text="${user.getEmail()}"></td>
-                    <td th:text="${user.getDate_of_birth()}"></td>
-                    <td th:text="${user.isEnabled()}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</body>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, '')}">
+
+<th:block th:fragment="content">
+    <h3 class="text-center my-5">Lista degli utenti</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Registration Date</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Date of birth</th>
+                <th>Enabled</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.getRole()}"></td>
+                <td th:text="${user.getReg_date()}"></td>
+                <td th:text="${user.getUsername()}"></td>
+                <td th:text="${user.getName()}"></td>
+                <td th:text="${user.getSurname()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td th:text="${user.getDate_of_birth()}"></td>
+                <td th:text="${user.isEnabled()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</th:block>
 </html>

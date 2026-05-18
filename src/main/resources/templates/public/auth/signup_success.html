@@ -1,26 +1,21 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <th:block th:insert="~{snippets/head}" />
-</head>
-<body class="bg-light">
-    <th:block th:insert="~{snippets/navbar}" />
-    <div class="container py-5">
-        <!-- Titolo -->
-        <div class="text-center my-5">
-            <h1 class="display-4 fw-bold mb-4">
-                Registrazione avvenuta con successo
-            </h1>
-        </div>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, 'py-5')}">
 
-        <!-- Bottone per tornare alla homepage -->
-        <div class="d-flex align-content-center">
-            <a class="text-center btn btn-primary btn-lg mx-auto" href="/">Torna alla homepage</a>
-        </div>
+<th:block th:fragment="content">
 
-        <!-- Carosello -->
-        <th:block th:insert="~{snippets/review_carousel}" />
+    <!-- Titolo -->
+    <div class="text-center my-5">
+        <h1 class="display-4 fw-bold mb-4">
+            Registrazione avvenuta con successo
+        </h1>
     </div>
-</body>
+
+    <!-- Bottone per tornare alla homepage -->
+    <div class="d-flex align-content-center">
+        <a class="text-center btn btn-primary btn-lg mx-auto" href="/">Torna alla homepage</a>
+    </div>
+
+</th:block>
 </html>
 

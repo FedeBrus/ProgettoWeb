@@ -2,6 +2,10 @@ package com.palestra.palestra.Controller;
 
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.ProgramService;
+import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
+import com.palestra.palestra.Repositories.CustomExerciseRepository;
+import com.palestra.palestra.Repositories.UserRepository;
+import com.palestra.palestra.Services.ProgramInserterService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
 import com.palestra.palestra.pojo.Exercise;
@@ -15,6 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,13 +32,15 @@ public class DashboardController {
     private final UserRepository repo;
     private final UserUtils utils;
     private final ProgramService programService;
+    private final ProgramInserterService programInserter;
 
     @Autowired
-    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService) {
+    public DashboardController(TrialUserManager trialUserManager, UserRepository repo, UserUtils utils, ProgramService programService, ProgramInserterService programInserter) {
         this.trialUserManager = trialUserManager;
         this.repo = repo;
         this.utils = utils;
         this.programService = programService;
+        this.programInserter = programInserter;
     }
 
     @GetMapping("/dashboard/prova")
@@ -41,6 +50,14 @@ public class DashboardController {
         page.addAttribute("username", username);
 
         return "public/dashboard/prova";
+    }
+
+    @GetMapping("/dashboard/pro")
+    public String proDashboard(Model page, Authentication auth) {
+        String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
+        page.addAttribute("username", username);
+
+        return "public/dashboard/pro";
     }
 
     @GetMapping("/dashboard/admin")
@@ -56,6 +73,8 @@ public class DashboardController {
         String returnPage = "";
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"))) {
             returnPage = "forward:/dashboard/prova";
+        } else if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
+            returnPage = "forward:/dashboard/pro";
         } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             returnPage = "forward:/dashboard/admin";
         }
@@ -168,5 +187,31 @@ public class DashboardController {
     @GetMapping("/dashboard/review")
     public String reviewForm() {
         return "public/dashboard/review";
+    }
+
+    @GetMapping("/dashboard/insert_program")
+    public String insertProgramForm() {
+        return "public/dashboard/insert_program";
+    }
+
+    @PostMapping("/dashboard/insert_program")
+    public String insertProgramInDB(
+            @RequestParam String programName,
+            @RequestParam String exercises,
+            Model page
+    ) {
+        boolean success = true;
+        try {
+            int calories = programInserter.addProgramToDB(programName, exercises);
+            page.addAttribute("calories", calories);
+        } catch (JacksonException e) {
+            success = false;
+            page.addAttribute("reason", "L'input inviato non è valido!");
+        } catch (IllegalStateException e) {
+            success = false;
+            page.addAttribute("reason", "Esiste già un programma con quel nome!");
+        }
+        page.addAttribute("success", success);
+        return "public/dashboard/insert_program";
     }
 }
