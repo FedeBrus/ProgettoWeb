@@ -104,12 +104,21 @@ public class UserRepository {
 
     @Transactional
     public void completeProgram(String username, String programName) {
-        String sql = """
-            MERGE INTO UserUsageStatistics KEY(username, program)
-            VALUES (?, ?, 1)
+        String updateSql = """
+            UPDATE UserUsageStatistics 
+            SET times = times + 1 
+            WHERE username = ? AND program = ?
         """;
 
-        jdbc.update(sql, username, programName);
+        int rowsAffected = jdbc.update(updateSql, username, programName);
+
+        if (rowsAffected == 0) {
+            String insertSql = """
+                INSERT INTO UserUsageStatistics (username, program, times) 
+                VALUES (?, ?, 1)
+            """;
+            jdbc.update(insertSql, username, programName);
+        }
     }
 
 

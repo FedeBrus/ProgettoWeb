@@ -3,12 +3,12 @@ package com.palestra.palestra.pojo;
 public class GlobalStatEntry {
     private final String role;
     private final String program;
-    private final int times;
+    private final double value;
 
-    public GlobalStatEntry(String role, String program, int times) {
+    public GlobalStatEntry(String role, String program, double value) {
         this.role = role;
         this.program = program;
-        this.times = times;
+        this.value = Math.round(value * 100.0) / 100.0; // Wow :|
     }
 
     public String getRole() {
@@ -19,7 +19,7 @@ public class GlobalStatEntry {
         return program;
     }
 
-    public int getTimes() {
-        return times;
+    public double getValue() {
+        return value;
     }
 }

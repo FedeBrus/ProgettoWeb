@@ -27,7 +27,7 @@ public class StatisticsRepository {
         """;
 
         RowMapper<GlobalStatEntry> rm = (r, i) -> {
-            return new GlobalStatEntry(r.getString(1), r.getString(2), r.getInt(3));
+            return new GlobalStatEntry(r.getString(1), r.getString(2), r.getDouble(3));
         };
 
         return jdbc.query(sql, rm);

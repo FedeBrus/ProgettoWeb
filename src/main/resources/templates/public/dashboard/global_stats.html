@@ -16,7 +16,7 @@
             <tr th:each="entry : ${global_stats}">
                 <td th:text="${entry.getRole()}"></td>
                 <td th:text="${entry.getProgram()}"></td>
-                <td th:text="${entry.getTimes()}"></td>
+                <td th:text="${entry.getValue()}"></td>
             </tr>
         </tbody>
     </table>
