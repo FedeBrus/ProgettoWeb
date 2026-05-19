@@ -1,24 +1,30 @@
 package com.palestra.palestra.Services;
 
 import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
+import com.palestra.palestra.Repositories.UserRepository;
+import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.pojo.Exercise;
 import com.palestra.palestra.pojo.Program;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
 public class ProgramService {
     private final TrainingAPIClient trainingClient;
     private final CustomProgramService customProgramService;
+    private final UserRepository repo;
+    private final TrialUserManager trialManager;
 
     @Autowired
-    public ProgramService(TrainingAPIClient trainingClient, CustomProgramService customProgramService) {
+    public ProgramService(TrainingAPIClient trainingClient, CustomProgramService customProgramService, UserRepository repo, TrialUserManager trialManager) {
         this.trainingClient = trainingClient;
         this.customProgramService = customProgramService;
+        this.repo = repo;
+        this.trialManager = trialManager;
     }
 
     public List<Program> getDefaultPrograms() {
@@ -56,4 +62,21 @@ public class ProgramService {
 
         return trainingClient.getProgramCalories(p);
     }
+
+    public void completeProgram(User authUser, String programName) throws IllegalAccessException {
+        final boolean isTrialUser = authUser.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"));
+
+        if(isTrialUser && trialManager.getTimesTrained(authUser.getUsername()) > 2) {
+            throw new IllegalAccessException();
+        }
+
+        repo.completeProgram(authUser.getUsername(), programName);
+
+        // L'utente prova potrebbe finire gli accessi
+        if(isTrialUser) {
+            if(trialManager.getTimesTrained(authUser.getUsername()) == 3) {
+                repo.disableUser(authUser.getUsername());
+            }
+        }
+     }
 }

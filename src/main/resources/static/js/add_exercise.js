@@ -9,6 +9,7 @@ class Exercise {
     }
 }
 
+// Closure
 const addExercise = (() => {
    let added = 0;
    return () => {

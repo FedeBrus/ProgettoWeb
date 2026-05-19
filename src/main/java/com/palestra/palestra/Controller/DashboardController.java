@@ -168,7 +168,14 @@ public class DashboardController {
     @GetMapping("/dashboard/complete_training")
     public String completeProgram(Model page, Authentication auth, @RequestParam String programName) {
         User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
-        repo.completeProgram(authUser.getUsername(), programName);
+
+        try {
+            programService.completeProgram(authUser, programName);
+        } catch (IllegalAccessException e) {
+            // TODO: Gestisci effettivamente l'errore
+
+            throw new RuntimeException(e);
+        }
         return "redirect:/dashboard";
     }
 
