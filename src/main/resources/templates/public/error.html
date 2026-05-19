@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{snippets/base :: layout(~{::content}, ~{::footer}, 'py-2')}">
+
+<th:block th:fragment="content">
+    <h1 class="text-center text-danger">Si è verificato un errore</h1>
+    <div class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
+</th:block>
+</html>

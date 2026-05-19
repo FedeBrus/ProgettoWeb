@@ -1,10 +1,19 @@
-MERGE INTO USERS(USERNAME, PASSWORD, ENABLED) KEY(USERNAME) VALUES
-('admin#10', '$2a$12$n.yrvz2s9lMV2mVq0fDb8uaP7PPBn5kVCIcsNs2JJWn2COHl4IMaC', 1),    -- Password: adm_id_10
-('basic#10', '$2a$12$JolEJV.JaLjGAOHMaZm/x.o4AE06DNiTLNKOOhgDxVZyBMVWAWBma', 1),    -- Password: bsc_id_10
-('pro#10', '$2a$12$iuphg8mw1fFAiP7PzJqtiOBDTqSCz6V1wFFBHFgvdIfbRy4BjxzyW', 1),      -- Password: pro_id_10
-('prova#1#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1),  -- Password: prv_id_10
-('prova#2#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1),  -- Password: prv_id_10
-('prova#3#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1);  -- Password: prv_id_10
+INSERT INTO USERS (USERNAME, PASSWORD, ENABLED)
+SELECT *
+FROM (
+         VALUES
+             ('admin#10', '$2a$12$n.yrvz2s9lMV2mVq0fDb8uaP7PPBn5kVCIcsNs2JJWn2COHl4IMaC', 1),    -- Password: adm_id_10
+             ('basic#10', '$2a$12$JolEJV.JaLjGAOHMaZm/x.o4AE06DNiTLNKOOhgDxVZyBMVWAWBma', 1),    -- Password: bsc_id_10
+             ('pro#10', '$2a$12$iuphg8mw1fFAiP7PzJqtiOBDTqSCz6V1wFFBHFgvdIfbRy4BjxzyW', 1),      -- Password: pro_id_10
+             ('prova#1#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1),  -- Password: prv_id_10
+             ('prova#2#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1),  -- Password: prv_id_10
+             ('prova#3#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1)   -- Password: prv_id_10
+) AS v(USERNAME, PASSWORD, ENABLED)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM USERS u
+    WHERE u.USERNAME = v.USERNAME
+);
 
 MERGE INTO AUTHORITIES(USERNAME, AUTHORITY) KEY(USERNAME) VALUES
 ('admin#10', 'ROLE_ADMIN'),

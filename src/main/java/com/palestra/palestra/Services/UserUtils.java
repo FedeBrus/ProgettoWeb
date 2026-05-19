@@ -37,7 +37,16 @@ public class UserUtils {
         if(Arrays.stream(roles).filter((s) -> s.equals(newRole.toString())).count() != 1) {
             throw new Exception("Unknown role");
         }
-        return repo.changeUserRole(username, newRole, auth);
+        boolean wasTrial = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"));
+
+        Authentication ret = repo.changeUserRole(username, newRole, auth);
+
+        // Assicurati che l'utente prova diventi abilitato dopo un upgrade
+        if(wasTrial) {
+            repo.enableUser(username);
+        }
+
+        return ret;
     }
 
 }

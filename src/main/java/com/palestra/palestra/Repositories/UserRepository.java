@@ -147,4 +147,16 @@ public class UserRepository {
         String sql = "DELETE FROM USERS WHERE ENABLED = FALSE";
         return jdbc.update(sql);
     }
+
+    @Transactional
+    public void disableUser(String username) {
+        final String sql = "UPDATE Users SET ENABLED = false WHERE username = ?";
+        jdbc.update(sql, username);
+    }
+
+    @Transactional
+    public void enableUser(String username) {
+        final String sql = "UPDATE Users SET ENABLED = true WHERE username = ?";
+        jdbc.update(sql, username);
+    }
 }

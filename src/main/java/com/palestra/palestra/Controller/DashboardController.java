@@ -168,7 +168,13 @@ public class DashboardController {
     @GetMapping("/dashboard/complete_training")
     public String completeProgram(Model page, Authentication auth, @RequestParam String programName) {
         User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
-        repo.completeProgram(authUser.getUsername(), programName);
+
+        try {
+            programService.completeProgram(authUser, programName);
+        } catch (IllegalAccessException e) {
+            page.addAttribute("error", "Il tuo utente ha finito gli allenamenti, esegui l'upgrade del tuo account per eseguirne altri");
+            return "public/error";
+        }
         return "redirect:/dashboard";
     }
 
