@@ -172,9 +172,8 @@ public class DashboardController {
         try {
             programService.completeProgram(authUser, programName);
         } catch (IllegalAccessException e) {
-            // TODO: Gestisci effettivamente l'errore
-
-            throw new RuntimeException(e);
+            page.addAttribute("error", "Il tuo utente ha finito gli allenamenti, esegui l'upgrade del tuo account per eseguirne altri");
+            return "public/error";
         }
         return "redirect:/dashboard";
     }
