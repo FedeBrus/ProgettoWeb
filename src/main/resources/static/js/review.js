@@ -19,7 +19,7 @@ form.addEventListener("submit", e => {
         }
         alertElement = document.createElement("div");
         alertElement.classList += "alert my-2 ";
-        if(d.status === 200) {
+        if(d.ok) {
             alertElement.classList += "alert-success";
             alertElement.textContent = "Recensione aggiunta con successo!";
             refreshCarousel(reviewTextArea.value); // Dal file [carousel.js]
