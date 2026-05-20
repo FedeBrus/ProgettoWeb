@@ -27,7 +27,7 @@
         <p th:text="|Questo programma ha un totale di ${calories} calorie|"></p>
 
         <div class="d-flex justify-content-around align-items-center">
-            <a class="btn btn-primary" th:href="@{/dashboard/complete_training(programName=${programName})}">Completa l'allenamento</a>
+            <a class="btn btn-primary" th:href="@{/dashboard/complete_training(programName=${programName})}">Completato</a>
         </div>
     </th:block>
     <th:block th:if="${notFound != null && notFound}">
