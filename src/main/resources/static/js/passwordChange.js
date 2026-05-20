@@ -9,7 +9,7 @@ form.addEventListener("submit", e => {
     }
 
     if(password.value !== newPassword.value) {
-        alert("Passwords need to match");
+        alert("Le password non coincidono");
         return;
     }
 
