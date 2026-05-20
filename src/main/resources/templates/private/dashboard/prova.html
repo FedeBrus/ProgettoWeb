@@ -6,16 +6,14 @@
         <h1 class="text-center text-primary">DASHBOARD UTENTE PROVA</h1>
         <h3>Benvenuto <th:block th:text="${username}"/></h3>
         <p>Allenamenti gratuiti utilizzati: <th:block th:text="${allenamenti}" />/3</p>
-        <a class="btn btn-primary block" href="/dashboard/profile" role="button">Visualizza profilo</a>
-        <a class="btn btn-primary block" href="/dashboard/change_password" role="button">Cambio password</a>
+        <a class="btn btn-primary block" th:href="@{/dashboard/profile}" role="button">Visualizza profilo</a>
+        <a class="btn btn-primary block" th:href="@{/dashboard/change_password}" role="button">Cambio password</a>
 
         <a th:if="${allenamenti < 3}" class="btn btn-primary block" th:href="@{/dashboard/training}" role="button">Allenamento</a>
         <a th:if="${allenamenti >= 3}" class="btn btn-primary block disabled" th:href="@{/dashboard/training}" role="button">Allenamento</a>
+        <a class="btn btn-primary block" th:href="@{/dashboard/upgrade}" role="button">Upgrade</a>
 
-
-        <a class="btn btn-primary block" href="/dashboard/upgrade" role="button">Upgrade</a>
         <th:block th:insert="~{snippets/review}"/>
-
         <div th:if="${allenamenti >= 3}" class="alert alert-warning my-2">
             <p>Il tuo utente è stato disabilitato, una volta effettuato il logout non potrai più accedere. Se vuoi mantenere il tuo account, effettua un upgrade</p>
         </div>

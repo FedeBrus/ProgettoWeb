@@ -8,6 +8,6 @@
     <p><b>Cognome</b>: <th:block th:text="${surname}"/></p>
     <p><b>Data di nascita</b>: <th:block th:text="${dob}"/></p>
     <p><b>Ruolo</b>: <th:block th:text="${role}"/></p>
-    <a class="btn btn-primary my-4" href="/dashboard" role="button">Torna alla dashboard</a>
+    <a class="btn btn-primary my-4" th:href="@{/dashboard}" role="button">Torna alla dashboard</a>
 </th:block>
 </html>

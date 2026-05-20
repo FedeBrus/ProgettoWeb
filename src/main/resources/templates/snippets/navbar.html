@@ -1,24 +1,24 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm px-4 py-3"
      xmlns:sec="http://www.thymeleaf.org">
-    <a class="navbar-brand fw-bold" href="/">
+    <a class="navbar-brand fw-bold" th:href="@{/}">
         <th:block th:insert="~{SharedTitle}" />
     </a>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item mx-2">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" th:href="@{/}">Home</a>
             </li>
             <li class="nav-item mx-2" sec:authorize="isAnonymous()">
-                <a class="nav-link" href="/login">Inizia allenamento</a>
+                <a class="nav-link" th:href="@{/login}">Inizia allenamento</a>
             </li>
             <li class="nav-item mx-2" sec:authorize="isAnonymous()">
-                <a class="nav-link" href="/signup">Registrati</a>
+                <a class="nav-link" th:href="@{/signup}">Registrati</a>
             </li>
             <li class="nav-item mx-2" sec:authorize="isAuthenticated()">
-                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item mx-2">
-                <a class="nav-link" href="/contact">Contattaci</a>
+                <a class="nav-link" th:href="@{/contact}">Contattaci</a>
             </li>
             <li class="nav-item mx-2" sec:authorize="isAuthenticated()">
                 <form th:action="@{/perform_logout}" method="post">

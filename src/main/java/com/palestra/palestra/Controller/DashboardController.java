@@ -58,7 +58,7 @@ public class DashboardController {
         page.addAttribute("allenamenti", trialUserManager.getTimesTrained(username));
         page.addAttribute("username", username);
 
-        return "public/dashboard/prova";
+        return "private/dashboard/prova";
     }
 
     @GetMapping("/dashboard/basic")
@@ -66,7 +66,7 @@ public class DashboardController {
         String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
         page.addAttribute("username", username);
 
-        return "public/dashboard/basic";
+        return "private/dashboard/basic";
     }
 
     @GetMapping("/dashboard/pro")
@@ -74,7 +74,7 @@ public class DashboardController {
         String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
         page.addAttribute("username", username);
 
-        return "public/dashboard/pro";
+        return "private/dashboard/pro";
     }
 
     @GetMapping("/dashboard/admin")
@@ -82,7 +82,7 @@ public class DashboardController {
         String username = ((User) Objects.requireNonNull(auth.getPrincipal())).getUsername();
         page.addAttribute("username", username);
         page.addAttribute("number_of_removed_users", null);
-        return "public/dashboard/admin";
+        return "private/dashboard/admin";
     }
 
     @GetMapping("/dashboard")
@@ -111,7 +111,7 @@ public class DashboardController {
         page.addAttribute("dob", u.getDate_of_birth());
         page.addAttribute("role", authUser.getAuthorities().iterator().next().toString());
 
-        return "public/dashboard/view_profile";
+        return "private/dashboard/view_profile";
     }
 
     @GetMapping("/dashboard/user_list")
@@ -119,7 +119,7 @@ public class DashboardController {
         List<com.palestra.palestra.pojo.User> allUsers = repo.getAllUserDetails();
         page.addAttribute("users", allUsers);
 
-        return "public/dashboard/user_list";
+        return "private/dashboard/user_list";
     }
 
     @GetMapping("/dashboard/remove_expired_users")
@@ -128,13 +128,13 @@ public class DashboardController {
         int numberOfRemovedUsers = repo.removeExpiredUsers();
         page.addAttribute("number_of_removed_users", numberOfRemovedUsers);
         page.addAttribute("username", authUser.getUsername());
-        return "public/dashboard/admin";
+        return "private/dashboard/admin";
     }
   
     @GetMapping("/dashboard/upgrade")
     public String upgradeProfile(Model page, Authentication auth) {
         page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
-        return "public/dashboard/upgrade";
+        return "private/dashboard/upgrade";
     }
 
     @GetMapping("/dashboard/training")
@@ -145,7 +145,7 @@ public class DashboardController {
         }
 
         page.addAttribute("defaultPrograms", programs);
-        return "public/dashboard/training";
+        return "private/dashboard/training";
     }
 
     @GetMapping("/dashboard/training_details")
@@ -162,7 +162,7 @@ public class DashboardController {
         page.addAttribute("programName", programName);
         page.addAttribute("exercises", exercises);
         page.addAttribute("calories", calories);
-        return "public/dashboard/training_details";
+        return "private/dashboard/training_details";
     }
 
     @GetMapping("/dashboard/complete_training")
@@ -173,7 +173,7 @@ public class DashboardController {
             programService.completeProgram(authUser, programName);
         } catch (IllegalAccessException e) {
             page.addAttribute("error", "Il tuo utente ha finito gli allenamenti, esegui l'upgrade del tuo account per eseguirne altri");
-            return "public/error";
+            return "private/error";
         }
         return "redirect:/dashboard";
     }
@@ -188,7 +188,7 @@ public class DashboardController {
         }
 
         page.addAttribute("role", auth.getAuthorities().iterator().next().toString().replace("ROLE_", ""));
-        return "public/dashboard/upgrade";
+        return "private/dashboard/upgrade";
     }
 
     @PostMapping("/dashboard/upgrade/basic")
@@ -203,7 +203,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard/change_password")
     public String changePassword(Model page, Authentication auth) {
-        return "public/dashboard/change_password";
+        return "private/dashboard/change_password";
     }
 
     @PostMapping("/dashboard/change_password")
@@ -216,17 +216,17 @@ public class DashboardController {
         } else {
             page.addAttribute("success", false);
         }
-        return "public/dashboard/change_password";
+        return "private/dashboard/change_password";
     }
 
     @GetMapping("/dashboard/review")
     public String reviewForm() {
-        return "public/dashboard/review";
+        return "private/dashboard/review";
     }
 
     @GetMapping("/dashboard/insert_program")
     public String insertProgramForm() {
-        return "public/dashboard/insert_program";
+        return "private/dashboard/insert_program";
     }
 
     @PostMapping("/dashboard/insert_program")
@@ -248,7 +248,7 @@ public class DashboardController {
             page.addAttribute("reason", "Esiste già un programma con quel nome!");
         }
         page.addAttribute("success", success);
-        return "public/dashboard/insert_program";
+        return "private/dashboard/insert_program";
     }
 
     @GetMapping("/dashboard/personal_stats")
@@ -258,13 +258,13 @@ public class DashboardController {
         page.addAttribute("username", username);
         page.addAttribute("labels", resultSet.stream().map(PersonalStatEntry::getProgram).toList());
         page.addAttribute("values", resultSet.stream().map(PersonalStatEntry::getTimes).toList());
-        return "public/dashboard/personal_stats";
+        return "private/dashboard/personal_stats";
     }
 
     @GetMapping("/dashboard/global_stats")
     public String globalStats(Model page) {
         List<GlobalStatEntry> resultSet = statisticsRepository.getGlobalStatistics();
         page.addAttribute("global_stats", resultSet);
-        return "public/dashboard/global_stats";
+        return "private/dashboard/global_stats";
     }
 }

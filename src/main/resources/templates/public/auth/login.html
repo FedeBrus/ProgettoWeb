@@ -3,7 +3,7 @@
 
 <th:block th:fragment="content">
     <h3>Accedi alla tua dashboard</h3>
-    <form action="/login" method="post">
+    <form th:action="@{/login}" method="post">
         <div class="form-group my-2">
             <label for="username">Username</label>
             <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
