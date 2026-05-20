@@ -33,7 +33,23 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
         return;
     }
 
-    const dob = new Date(dobInput);
+    // It's overengineering time 👨‍🔬
+    const dob = new Date(
+        dobInput
+            .split("/")
+            .reduce((prev, cur, idx) => idx === 0 ? (cur) : (cur + "-" + prev))
+    );
+
+    // Overflow della data
+    if(
+        dob.getDate() !== parseInt(dobInput.split("/")[0])
+        || dob.getMonth() !== parseInt(dobInput.split("/")[1]) - 1
+        || dob.getFullYear() !== parseInt(dobInput.split("/")[2])) {
+
+        alert("La data di nascita inserita non è valida");
+        return;
+    }
+
     const today = new Date();
     const earliestAcceptableDate= new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
 
@@ -62,4 +78,16 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     }
 
     e.target.submit();
+});
+
+// Mandiamo la data nel formato corretto
+document.getElementById('signupForm').addEventListener('formdata', function(e) {
+    e.preventDefault();
+    const dobInput = document.getElementById("inputDOB").value;
+
+    const date = dobInput
+            .split("/")
+            .reduce((prev, cur, idx) => idx === 0 ? (cur) : (cur + "-" + prev))
+
+    e.formData.set("dob", date);
 });
