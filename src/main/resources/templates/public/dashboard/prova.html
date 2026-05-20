@@ -14,7 +14,7 @@
 
 
         <a class="btn btn-primary block" href="/dashboard/upgrade" role="button">Upgrade</a>
-        <a class="btn btn-primary block" href="/dashboard/review" role="button">Inserisci recensione</a>
+        <th:block th:insert="~{snippets/review}"/>
 
         <div th:if="${allenamenti >= 3}" class="alert alert-warning my-2">
             <p>Il tuo utente è stato disabilitato, una volta effettuato il logout non potrai più accedere. Se vuoi mantenere il tuo account, effettua un upgrade</p>

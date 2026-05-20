@@ -1,11 +1,16 @@
 const form = document.getElementById("reviewForm");
 const reviewTextArea = document.getElementById("review");
 const container = document.getElementById("container");
+const leaveAReviewForm = document.getElementById("leaveAReview");
+const toggleForm = document.getElementById("toggleReviewForm");
 
 let alertElement = null;
 
 form.addEventListener("submit", e => {
     e.preventDefault();
+    if(!reviewTextArea.checkValidity()) {
+        return;
+    }
 
     const data = new FormData();
     data.set("review", reviewTextArea.value);
@@ -31,4 +36,19 @@ form.addEventListener("submit", e => {
         }
         container.appendChild(alertElement);
     })
-})
+});
+
+// Closure
+(() => {
+    let hidden = true;
+
+    toggleForm.addEventListener("click", _ => {
+        if(hidden) {
+            leaveAReviewForm.classList.remove("d-none");
+        } else {
+            leaveAReviewForm.classList.add("d-none");
+        }
+
+        hidden = !hidden;
+    });
+})();
