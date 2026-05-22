@@ -2,9 +2,9 @@ package com.palestra.palestra.Controller;
 
 import com.palestra.palestra.Repositories.StatisticsRepository;
 import com.palestra.palestra.Repositories.UserRepository;
-import com.palestra.palestra.Services.CustomProgramService;
-import com.palestra.palestra.Services.ProgramService;
-import com.palestra.palestra.Services.UserUtils;
+import com.palestra.palestra.Services.Programs.CustomProgramService;
+import com.palestra.palestra.Services.Programs.ProgramService;
+import com.palestra.palestra.Services.UserActions.UserUtils;
 import com.palestra.palestra.pojo.Programs.Exercise;
 import com.palestra.palestra.pojo.Stats.GlobalStatEntry;
 import com.palestra.palestra.pojo.Stats.PersonalStatEntry;

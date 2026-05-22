@@ -1,4 +1,4 @@
-package com.palestra.palestra.Services;
+package com.palestra.palestra.Services.UserActions;
 
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Auth.PasswordChecker;

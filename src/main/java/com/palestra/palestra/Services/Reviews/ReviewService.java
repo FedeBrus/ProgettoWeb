@@ -1,4 +1,4 @@
-package com.palestra.palestra.Services;
+package com.palestra.palestra.Services.Reviews;
 
 import com.palestra.palestra.Repositories.ReviewRepository;
 import com.palestra.palestra.pojo.Reviews.Review;

@@ -1,6 +1,6 @@
 package com.palestra.palestra.Controller;
 
-import com.palestra.palestra.Services.ReviewService;
+import com.palestra.palestra.Services.Reviews.ReviewService;
 import com.palestra.palestra.pojo.Reviews.Review;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;

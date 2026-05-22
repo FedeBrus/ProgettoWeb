@@ -1,4 +1,4 @@
-package com.palestra.palestra.Services;
+package com.palestra.palestra.Services.Programs;
 
 import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.Repositories.UserRepository;
