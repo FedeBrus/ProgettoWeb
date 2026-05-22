@@ -1,4 +1,4 @@
-package com.palestra.palestra.pojo;
+package com.palestra.palestra.pojo.Reviews;
 
 public class Review {
     private String username;

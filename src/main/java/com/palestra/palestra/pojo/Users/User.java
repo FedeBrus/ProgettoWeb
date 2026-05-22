@@ -1,7 +1,6 @@
-package com.palestra.palestra.pojo;
+package com.palestra.palestra.pojo.Users;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class User {
     private int id;

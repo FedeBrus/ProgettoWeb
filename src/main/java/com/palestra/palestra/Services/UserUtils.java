@@ -2,15 +2,12 @@ package com.palestra.palestra.Services;
 
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Auth.PasswordChecker;
-import com.palestra.palestra.pojo.SecurityUser;
-import com.palestra.palestra.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Date;
 
 @Service
 public class UserUtils {

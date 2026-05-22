@@ -1,6 +1,6 @@
 package com.palestra.palestra.Services.Auth;
 
-import com.palestra.palestra.pojo.User;
+import com.palestra.palestra.pojo.Users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

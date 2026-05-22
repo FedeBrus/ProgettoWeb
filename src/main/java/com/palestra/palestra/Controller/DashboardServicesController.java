@@ -4,12 +4,11 @@ import com.palestra.palestra.Repositories.StatisticsRepository;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.CustomProgramService;
 import com.palestra.palestra.Services.ProgramService;
-import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.Services.UserUtils;
-import com.palestra.palestra.pojo.Exercise;
-import com.palestra.palestra.pojo.GlobalStatEntry;
-import com.palestra.palestra.pojo.PersonalStatEntry;
-import com.palestra.palestra.pojo.Program;
+import com.palestra.palestra.pojo.Programs.Exercise;
+import com.palestra.palestra.pojo.Stats.GlobalStatEntry;
+import com.palestra.palestra.pojo.Stats.PersonalStatEntry;
+import com.palestra.palestra.pojo.Programs.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,7 +49,7 @@ public class DashboardServicesController {
     @GetMapping("/dashboard/profile")
     public String userProfile(Model page, Authentication auth) {
         User authUser = ((User) Objects.requireNonNull(auth.getPrincipal()));
-        com.palestra.palestra.pojo.User u = repo.getUserDetails(authUser.getUsername());
+        com.palestra.palestra.pojo.Users.User u = repo.getUserDetails(authUser.getUsername());
         page.addAttribute("username", authUser.getUsername());
         page.addAttribute("name", u.getName());
         page.addAttribute("surname", u.getSurname());
@@ -62,7 +61,7 @@ public class DashboardServicesController {
 
     @GetMapping("/dashboard/user_list")
     public String userList(Model page) {
-        List<com.palestra.palestra.pojo.User> allUsers = repo.getAllUserDetails();
+        List<com.palestra.palestra.pojo.Users.User> allUsers = repo.getAllUserDetails();
         page.addAttribute("users", allUsers);
 
         return "private/dashboard_services/user_list";

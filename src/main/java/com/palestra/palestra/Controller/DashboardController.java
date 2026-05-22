@@ -1,15 +1,6 @@
 package com.palestra.palestra.Controller;
 
-import com.palestra.palestra.Repositories.StatisticsRepository;
-import com.palestra.palestra.Repositories.UserRepository;
-import com.palestra.palestra.Services.ProgramService;
-import com.palestra.palestra.Services.CustomProgramService;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
-import com.palestra.palestra.Services.UserUtils;
-import com.palestra.palestra.pojo.Exercise;
-import com.palestra.palestra.pojo.GlobalStatEntry;
-import com.palestra.palestra.pojo.PersonalStatEntry;
-import com.palestra.palestra.pojo.Program;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,12 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import tools.jackson.core.JacksonException;
-
-import java.util.List;
 import java.util.Objects;
 
 @Controller

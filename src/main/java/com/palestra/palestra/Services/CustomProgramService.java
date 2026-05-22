@@ -2,8 +2,8 @@ package com.palestra.palestra.Services;
 
 import com.palestra.palestra.OpenFeignClients.TrainingAPIClient;
 import com.palestra.palestra.Repositories.CustomExerciseRepository;
-import com.palestra.palestra.pojo.Exercise;
-import com.palestra.palestra.pojo.Program;
+import com.palestra.palestra.pojo.Programs.Exercise;
+import com.palestra.palestra.pojo.Programs.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tools.jackson.core.JacksonException;

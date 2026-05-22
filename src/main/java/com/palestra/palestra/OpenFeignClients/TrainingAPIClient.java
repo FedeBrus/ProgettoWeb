@@ -1,7 +1,7 @@
 package com.palestra.palestra.OpenFeignClients;
 
-import com.palestra.palestra.pojo.Exercise;
-import com.palestra.palestra.pojo.Program;
+import com.palestra.palestra.pojo.Programs.Exercise;
+import com.palestra.palestra.pojo.Programs.Program;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

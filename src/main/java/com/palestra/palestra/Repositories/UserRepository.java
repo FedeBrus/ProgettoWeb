@@ -1,7 +1,7 @@
 package com.palestra.palestra.Repositories;
 
-import com.palestra.palestra.pojo.SecurityUser;
-import com.palestra.palestra.pojo.User;
+import com.palestra.palestra.pojo.Users.SecurityUser;
+import com.palestra.palestra.pojo.Users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,9 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Repository

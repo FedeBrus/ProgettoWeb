@@ -1,4 +1,4 @@
-package com.palestra.palestra.pojo;
+package com.palestra.palestra.pojo.Programs;
 
 import java.util.List;
 

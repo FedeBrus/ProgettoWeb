@@ -1,7 +1,7 @@
 package com.palestra.palestra.Repositories;
 
-import com.palestra.palestra.pojo.Exercise;
-import com.palestra.palestra.pojo.Program;
+import com.palestra.palestra.pojo.Programs.Exercise;
+import com.palestra.palestra.pojo.Programs.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

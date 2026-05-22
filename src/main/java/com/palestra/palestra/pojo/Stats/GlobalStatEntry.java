@@ -1,4 +1,4 @@
-package com.palestra.palestra.pojo;
+package com.palestra.palestra.pojo.Stats;
 
 public class GlobalStatEntry {
     private final String role;
