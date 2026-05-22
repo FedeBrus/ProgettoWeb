@@ -21,17 +21,17 @@ public class UserUtils {
     }
 
     public boolean changePassword(String username, String newPassword) {
-        if(pwChecker.checkPassword(newPassword)) {
+        if (pwChecker.checkPassword(newPassword)) {
             repo.changePassword(username, newPassword);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     public Authentication changeRole(String username, SimpleGrantedAuthority newRole, Authentication auth) throws Exception {
         String[] roles = new String[] {"ROLE_USER_PROVA", "ROLE_USER_BASIC", "ROLE_USER_PRO"};
-        if(Arrays.stream(roles).filter((s) -> s.equals(newRole.toString())).count() != 1) {
+        if (Arrays.stream(roles).filter((s) -> s.equals(newRole.toString())).count() != 1) {
             throw new Exception("Unknown role");
         }
         boolean wasTrial = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PROVA"));

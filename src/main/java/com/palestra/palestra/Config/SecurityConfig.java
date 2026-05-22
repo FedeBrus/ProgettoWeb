@@ -16,6 +16,11 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    // Variabili statiche per rendere più leggibile la security config
+    private static final String[] ALL_USERS = {"ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO"};
+    private static final String[] PAYING_CUSTOMER_USER = {"USER_BASIC", "USER_PRO"};
+    private static final String[] ANY_CUSTOMER_USER = {"USER_PROVA", "USER_BASIC", "USER_PRO"};
+
     // User details manager
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
@@ -36,28 +41,39 @@ public class SecurityConfig {
                         .failureForwardUrl("/loginFailure")
         );
 
-        http.authorizeHttpRequests(auth ->
-                auth
-                .requestMatchers("/dashboard").hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
-                .requestMatchers("/dashboard/basic").hasRole("USER_BASIC")
-                .requestMatchers("/dashboard/pro").hasRole("USER_PRO")
-                .requestMatchers("/dashboard/admin").hasRole("ADMIN")
-                .requestMatchers("/dashboard/user_list").hasRole("ADMIN")
-                .requestMatchers("/dashboard/global_stats").hasRole("ADMIN")
-                .requestMatchers("/dashboard/remove_expired_users").hasRole("ADMIN")
-                .requestMatchers("/dashboard/personal_stats").hasAnyRole("USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/training").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/training_details").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/complete_training").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/profile").hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/change_password").hasAnyRole("ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/upgrade").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/upgrade/basic").hasAnyRole("USER_PROVA")
-                .requestMatchers("/dashboard/upgrade/pro").hasAnyRole("USER_PROVA", "USER_BASIC")
-                .requestMatchers("/dashboard/review").hasAnyRole("USER_PROVA", "USER_BASIC", "USER_PRO")
-                .requestMatchers("/dashboard/insert_program").hasRole("USER_PRO")
-                .anyRequest().permitAll()
+        http.authorizeHttpRequests(auth -> auth
+            // Accessibili a tutti gli utenti autenticati
+            .requestMatchers("/dashboard",
+                    "/dashboard/profile",
+                    "/dashboard/change_password").hasAnyRole(ALL_USERS)
+
+            // Solo ruoli utente (non admin)
+            .requestMatchers("/dashboard/training",
+                    "/dashboard/training_details",
+                    "/dashboard/complete_training",
+                    "/dashboard/upgrade",
+                    "/dashboard/review").hasAnyRole(ANY_CUSTOMER_USER)
+
+            // Solo utenti con abbonamento attivo
+            .requestMatchers("/dashboard/personal_stats").hasAnyRole(PAYING_CUSTOMER_USER)
+            .requestMatchers("/dashboard/insert_program").hasRole("USER_PRO")
+
+            // Upgrade del piano
+            .requestMatchers("/dashboard/upgrade/basic").hasRole("USER_PROVA")
+            .requestMatchers("/dashboard/upgrade/pro").hasAnyRole("USER_PROVA", "USER_BASIC")
+
+            // Dashboards
+            .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
+            .requestMatchers("/dashboard/basic").hasRole("USER_BASIC")
+            .requestMatchers("/dashboard/pro").hasRole("USER_PRO")
+            .requestMatchers("/dashboard/admin").hasRole("ADMIN")
+
+            // Sezione admin
+            .requestMatchers("/dashboard/user_list",
+                    "/dashboard/global_stats",
+                    "/dashboard/remove_expired_users").hasRole("ADMIN")
+
+            .anyRequest().permitAll()
         );
 
         http.logout(c ->
