@@ -19,7 +19,7 @@ public class SecurityConfig {
     // Variabili statiche per rendere più leggibile la security config
     private static final String[] ALL_USERS = {"ADMIN", "USER_PROVA", "USER_BASIC", "USER_PRO"};
     private static final String[] PAYING_CUSTOMER_USER = {"USER_BASIC", "USER_PRO"};
-    private static final String[] ANY_CUSTOMER_USER = {"USER_PROVA", "USER_BASIC", "USER_PRO"};
+    private static final String[] CUSTOMER_USER = {"USER_PROVA", "USER_BASIC", "USER_PRO"};
 
     // User details manager
     @Bean
@@ -43,24 +43,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
             // Accessibili a tutti gli utenti autenticati
-            .requestMatchers("/dashboard",
-                    "/dashboard/profile",
-                    "/dashboard/change_password").hasAnyRole(ALL_USERS)
-
-            // Solo ruoli utente (non admin)
-            .requestMatchers("/dashboard/training",
-                    "/dashboard/training_details",
-                    "/dashboard/complete_training",
-                    "/dashboard/upgrade",
-                    "/dashboard/review").hasAnyRole(ANY_CUSTOMER_USER)
-
-            // Solo utenti con abbonamento attivo
-            .requestMatchers("/dashboard/personal_stats").hasAnyRole(PAYING_CUSTOMER_USER)
-            .requestMatchers("/dashboard/insert_program").hasRole("USER_PRO")
-
-            // Upgrade del piano
-            .requestMatchers("/dashboard/upgrade/basic").hasRole("USER_PROVA")
-            .requestMatchers("/dashboard/upgrade/pro").hasAnyRole("USER_PROVA", "USER_BASIC")
+            .requestMatchers("/dashboard").hasAnyRole(ALL_USERS)
 
             // Dashboards
             .requestMatchers("/dashboard/prova").hasRole("USER_PROVA")
@@ -69,9 +52,18 @@ public class SecurityConfig {
             .requestMatchers("/dashboard/admin").hasRole("ADMIN")
 
             // Sezione admin
-            .requestMatchers("/dashboard/user_list",
-                    "/dashboard/global_stats",
-                    "/dashboard/remove_expired_users").hasRole("ADMIN")
+            .requestMatchers("/dashboard/admin/**").hasRole("ADMIN")
+
+            // non admin
+            .requestMatchers("/dashboard/user/**").hasAnyRole(CUSTOMER_USER)
+
+            // funzionalità basic e pro
+            .requestMatchers("/dashboard/user/personal_stats").hasAnyRole(PAYING_CUSTOMER_USER)
+            .requestMatchers("/dashboard/user/insert_program").hasRole("USER_PRO")
+
+            // upgrade del piano
+            .requestMatchers("/dashboard/upgrade/basic").hasRole("USER_PROVA")
+            .requestMatchers("/dashboard/upgrade/pro").hasAnyRole("USER_PROVA", "USER_BASIC")
 
             .anyRequest().permitAll()
         );
