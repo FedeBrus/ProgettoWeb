@@ -1,7 +1,7 @@
 package com.palestra.palestra.Repositories;
 
-import com.palestra.palestra.pojo.GlobalStatEntry;
-import com.palestra.palestra.pojo.PersonalStatEntry;
+import com.palestra.palestra.pojo.Stats.GlobalStatEntry;
+import com.palestra.palestra.pojo.Stats.PersonalStatEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

@@ -1,4 +1,4 @@
-package com.palestra.palestra.pojo;
+package com.palestra.palestra.pojo.Users;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

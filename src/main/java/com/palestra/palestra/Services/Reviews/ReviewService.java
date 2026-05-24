@@ -1,13 +1,11 @@
-package com.palestra.palestra.Services;
+package com.palestra.palestra.Services.Reviews;
 
 import com.palestra.palestra.Repositories.ReviewRepository;
-import com.palestra.palestra.pojo.Review;
+import com.palestra.palestra.pojo.Reviews.Review;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ReviewService {

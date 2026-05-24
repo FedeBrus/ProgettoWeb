@@ -1,9 +1,7 @@
 package com.palestra.palestra.Controller;
 
-import com.palestra.palestra.Repositories.ReviewRepository;
-import com.palestra.palestra.Repositories.UserRepository;
-import com.palestra.palestra.Services.ReviewService;
-import com.palestra.palestra.pojo.Review;
+import com.palestra.palestra.Services.Reviews.ReviewService;
+import com.palestra.palestra.pojo.Reviews.Review;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

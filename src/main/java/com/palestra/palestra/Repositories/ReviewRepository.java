@@ -1,9 +1,8 @@
 package com.palestra.palestra.Repositories;
 
-import com.palestra.palestra.pojo.Review;
+import com.palestra.palestra.pojo.Reviews.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

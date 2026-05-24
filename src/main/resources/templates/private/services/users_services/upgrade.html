@@ -8,11 +8,11 @@
     <p>Il tuo piano attuale è <th:block th:text="${role}" /></p>
 
 
-    <form th:if="${role == 'USER_PROVA'}" th:action="@{/dashboard/upgrade/basic}" method="post">
+    <form th:if="${role == 'USER_PROVA'}" th:action="@{/dashboard/user/upgrade/basic}" method="post">
         <input class="btn btn-success my-2" type="submit" value="Upgrade a piano BASIC">
     </form>
 
-    <form th:if="${role != 'USER_PRO'}" th:action="@{/dashboard/upgrade/pro}" method="post">
+    <form th:if="${role != 'USER_PRO'}" th:action="@{/dashboard/user/upgrade/pro}" method="post">
         <input class="btn btn-success my-2" type="submit" value="Upgrade a piano PRO">
     </form>
 

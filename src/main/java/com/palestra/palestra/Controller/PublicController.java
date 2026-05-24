@@ -3,15 +3,11 @@ package com.palestra.palestra.Controller;
 import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Auth.CheckSignUpInfo;
 import com.palestra.palestra.Services.Auth.CheckUser;
-import com.palestra.palestra.pojo.User;
+import com.palestra.palestra.pojo.Users.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
