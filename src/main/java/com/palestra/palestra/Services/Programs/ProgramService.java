@@ -5,11 +5,13 @@ import com.palestra.palestra.Repositories.UserRepository;
 import com.palestra.palestra.Services.Trial.TrialUserManager;
 import com.palestra.palestra.pojo.Programs.Exercise;
 import com.palestra.palestra.pojo.Programs.Program;
+import feign.RetryableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.net.ConnectException;
 import java.util.List;
 
 @Service
@@ -27,16 +29,16 @@ public class ProgramService {
         this.trialManager = trialManager;
     }
 
-    public List<Program> getDefaultPrograms() {
+    public List<Program> getDefaultPrograms() throws RetryableException {
         return trainingClient.getDefaultPrograms();
     }
 
-    private boolean isDefaultProgram(String programName) {
+    private boolean isDefaultProgram(String programName) throws RetryableException {
         List<String> defaultProgramsNames = getDefaultPrograms().stream().map(Program::getName).toList();
         return defaultProgramsNames.contains(programName);
     }
 
-    public List<Exercise> getProgramExercises(String username, String programName) throws ClassNotFoundException {
+    public List<Exercise> getProgramExercises(String username, String programName) throws ClassNotFoundException, RetryableException {
         if (isDefaultProgram(programName)) {
             return trainingClient.getProgramExercises(programName);
         } else {
@@ -44,7 +46,7 @@ public class ProgramService {
         }
     }
 
-    private Program getDefaultProgramFromName(String programName) {
+    private Program getDefaultProgramFromName(String programName) throws RetryableException {
         List<Program> defaultPrograms = trainingClient.getDefaultPrograms();
         // Programmazione funzionale my beloved <3
         return defaultPrograms.stream().filter((Program p) -> {
@@ -52,7 +54,7 @@ public class ProgramService {
         }).toList().getFirst();
     }
 
-    public int getProgramCalories(String username, String programName) throws ClassNotFoundException {
+    public int getProgramCalories(String username, String programName) throws ClassNotFoundException, RetryableException {
         Program p = null;
         if (isDefaultProgram(programName)) {
             p = getDefaultProgramFromName(programName);

@@ -8,6 +8,7 @@ import com.palestra.palestra.Services.UserActions.UserUtils;
 import com.palestra.palestra.pojo.Programs.Exercise;
 import com.palestra.palestra.pojo.Stats.PersonalStatEntry;
 import com.palestra.palestra.pojo.Programs.Program;
+import feign.RetryableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tools.jackson.core.JacksonException;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,7 +68,13 @@ public class DashboardServicesController {
 
     @GetMapping("/dashboard/user/training")
     public String defaultPrograms(Model page, Authentication auth) {
-        List<Program> programs = programService.getDefaultPrograms();
+        List<Program> programs;
+        try{
+            programs = programService.getDefaultPrograms();
+        } catch (RetryableException r)  {
+            page.addAttribute("error", "Impossibile contattare il servizio REST");
+            return "public/error";
+        }
         if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER_PRO"))) {
             programs.addAll(customPrograms.getCustomPrograms(((User) Objects.requireNonNull(auth.getPrincipal())).getUsername()));
         }
@@ -84,6 +92,9 @@ public class DashboardServicesController {
             calories = programService.getProgramCalories(((User) auth.getPrincipal()).getUsername(), programName);
         } catch (ClassNotFoundException e) {
             page.addAttribute("notFound", true);
+        } catch (RetryableException c) {
+            page.addAttribute("error", "Impossibile contattare il servizio REST");
+            return "public/error";
         }
 
         page.addAttribute("programName", programName);

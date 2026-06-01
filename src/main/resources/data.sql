@@ -2,12 +2,12 @@ INSERT INTO USERS (USERNAME, PASSWORD, ENABLED)
 SELECT *
 FROM (
          VALUES
-             ('admin#10', '$2a$12$n.yrvz2s9lMV2mVq0fDb8uaP7PPBn5kVCIcsNs2JJWn2COHl4IMaC', 1),    -- Password: adm_id_10
-             ('basic#10', '$2a$12$JolEJV.JaLjGAOHMaZm/x.o4AE06DNiTLNKOOhgDxVZyBMVWAWBma', 1),    -- Password: bsc_id_10
-             ('pro#10', '$2a$12$iuphg8mw1fFAiP7PzJqtiOBDTqSCz6V1wFFBHFgvdIfbRy4BjxzyW', 1),      -- Password: pro_id_10
-             ('prova#1#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1),  -- Password: prv_id_10
-             ('prova#2#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1),  -- Password: prv_id_10
-             ('prova#3#10', '$2a$12$LnzRh6GC2vSS3SlBIJf8..4O4DK77kw9QPps2bOA7rlHI5iUSS9aS', 1)   -- Password: prv_id_10
+             ('admin#10', '$2a$12$TmrJhOPgKB.Rq5rtBa.Qv.hQ6nNV362WB.edZHi4HBZCPZJC3wzQO', 1),    -- Password: ad_id_10
+             ('basic#10', '$2a$12$Qb5VCc5R5bYDB/jIAYoayud9ABaIuHLG2osUGkaXtpDFa1WONm.9y', 1),    -- Password: bs_id_10
+             ('pro#10', '$2a$12$oiiegyG.Lgw2KikU81LAHemmexAOo8KruVtlzU974utEJcRJExlzq', 1),      -- Password: pr_id_10
+             ('prova#1#10', '$2a$12$vFY9D2ei429EoPiffxalde3I0NySBiPXIS0uFTUYmI7KlibjzRuZm', 1),  -- Password: pv_id_10
+             ('prova#2#10', '$2a$12$iwLBSfaV4zxwfoy3hiQiwOmlfFHz9iFkWUDB3kFniy4PBuNFjLcAm', 1),  -- Password: pv_id_10
+             ('prova#3#10', '$2a$12$HVPlvpPTxfT/tQBJ4XvVFeRQv3muOrx2emJKwAdT4IyuYint0yL4a', 1)   -- Password: pv_id_10
 ) AS v(USERNAME, PASSWORD, ENABLED)
 WHERE NOT EXISTS (
     SELECT 1
@@ -15,14 +15,22 @@ WHERE NOT EXISTS (
     WHERE u.USERNAME = v.USERNAME
 );
 
-MERGE INTO AUTHORITIES(USERNAME, AUTHORITY) KEY(USERNAME) VALUES
-('admin#10', 'ROLE_ADMIN'),
-('basic#10', 'ROLE_USER_BASIC'),
-('pro#10', 'ROLE_USER_PRO'),
-('prova#1#10', 'ROLE_USER_PROVA'),
-('prova#2#10', 'ROLE_USER_PROVA'),
-('prova#3#10', 'ROLE_USER_PROVA');
-
+INSERT INTO AUTHORITIES(USERNAME, AUTHORITY)
+    SELECT *
+    FROM (
+        VALUES
+        ('admin#10', 'ROLE_ADMIN'),
+        ('basic#10', 'ROLE_USER_BASIC'),
+        ('pro#10', 'ROLE_USER_PRO'),
+        ('prova#1#10', 'ROLE_USER_PROVA'),
+        ('prova#2#10', 'ROLE_USER_PROVA'),
+        ('prova#3#10', 'ROLE_USER_PROVA')
+    ) AS v(USERNAME, AUTHORITY)
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM AUTHORITIES a
+        WHERE a.USERNAME = v.USERNAME
+    );
 
 MERGE INTO USERDATA (USERNAME, NAME, SURNAME, DATE_OF_BIRTH, EMAIL, REG_DATE) KEY(USERNAME) VALUES
 ('admin#10',    'Mario',   'Rossi',    DATE '1985-03-12', 'mario.rossi@example.com',    CURRENT_DATE),
