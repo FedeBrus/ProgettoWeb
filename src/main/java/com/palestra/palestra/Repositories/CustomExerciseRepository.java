@@ -28,9 +28,6 @@ public class CustomExerciseRepository {
     }
 
     public List<Program> getCustomPrograms(String username) {
-        // TODO: Probabilmente si può usare una query sola e iterare i risultati e salvare man mano
-        // TODO: i vari programmi, per ora faccio così
-
         final String getProgramNames = "SELECT DISTINCT program_name FROM EXERCISES WHERE username=?";
         List<String> programs = jdbc.query(getProgramNames, (r, i) -> r.getString(1), username);
 

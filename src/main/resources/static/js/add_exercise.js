@@ -127,7 +127,9 @@ document.getElementById("addProgramForm").addEventListener("formdata", e => {
         listOfExercises.push(e);
         i++;
     }
-
+    //////////////
+    // ESERCIZI //
+    //////////////
     e.formData.append("exercises", JSON.stringify(listOfExercises));
 });
 
